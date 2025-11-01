@@ -148,6 +148,12 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+#  Cloudinary configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dip3hs9cy',
+    'API_KEY': '238558167885298',
+    'API_SECRET': '0hsXpaKoavlE-_svZCFsGY1oscg',
+}
 
 # Use Cloudinary for file storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
