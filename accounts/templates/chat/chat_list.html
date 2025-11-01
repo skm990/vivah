@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vivah - Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Chat section */
+        .chat-list {
+            max-width: 700px;
+            margin: 100px auto 40px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f4d7de;
+            text-decoration: none;
+            color: #333;
+            transition: 0.3s;
+        }
+        .chat-item:hover { background-color: #fff4f8; }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #ffd1dc, #ffe0e9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d6336c;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        .chat-info { flex: 1; }
+        .chat-info h4 {
+            font-size: 16px;
+            color: #d6336c;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-info p {
+            color: #555;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .badge {
+            background-color: #ffbf00;
+            color: black;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 3px 7px;
+            font-size: 11px;
+        }
+        .no-chat {
+            text-align: center;
+            color: #888;
+            padding: 50px;
+        }
+        .chat-item.unread h4 {
+            font-weight: 700;
+            color: #d6336c;
+        }
+        .chat-item.unread p {
+            font-weight: 600;
+            color: #000;
+        }
+        .chat-item.unread {
+            background-color: #fff7fa;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar/navbar.html' %}
+
+    <div class="chat-list">
+        <div class="chat-header">💌 My Chats</div>
+
+        {% if user_data %}
+            {% for c in user_data %}
+                <a href="{% url 'chat_view' c.user.username %}" class="chat-item {% if c.has_unread %}unread{% endif %}">
+                    <div class="avatar">
+                        {{ c.user.first_name|slice:":1"|upper }}
+                    </div>
+                    <div class="chat-info">
+                        <h4>
+                            {{ c.user.first_name }}
+                            {% if c.unseen_count %}
+                                <span class="badge">{{ c.unseen_count }}</span>
+                            {% endif %}
+                        </h4>
+                        <p>{{ c.last_message|default:"No messages yet" }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="no-chat">
+                No users have accepted your Vivah profile yet. Once someone accepts, you can start chatting! 💬
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

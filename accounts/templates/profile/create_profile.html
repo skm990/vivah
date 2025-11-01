@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <title>Vivah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
+            min-height: 100vh;
+            position: relative;
+            padding-top: 70px;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/gplay.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            text-align: center;
+            color: #d6336c;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-group {
+            flex: 1 1 45%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width { flex: 1 1 100%; }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="file"], select, textarea {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #d6336c;
+            box-shadow: 0 0 8px rgba(214, 51, 108, 0.3);
+        }
+
+        button {
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #c2185b, #f06292);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #d6336c;
+            border-bottom: 2px solid #d6336c;
+            padding-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .back-link { display: inline-block; margin-top: 20px; color: #d6336c; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+
+        .image-preview img,
+        .gallery-preview img {
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            border: 2px solid #f0f0f0;
+        }
+
+        .gallery-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .gallery-preview div { position: relative; display: inline-block; }
+
+        .gallery-preview a.delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            line-height: 22px;
+            border-radius: 50%;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .gallery-preview a.delete-btn:hover { background: rgba(214, 51, 108, 0.8); }
+
+        label[for="id_image"], label[for="id_gallery_images"] {
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            margin-top: 5px;
+            width: fit-content;
+        }
+
+        label[for="id_image"]:hover, label[for="id_gallery_images"]:hover {
+            background: linear-gradient(90deg, #c2185b, #f06292);
+        }
+
+        .corner-decor {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 80px;
+            height: 80px;
+            background: url('https://cdn-icons-png.flaticon.com/512/990/990748.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.1;
+        }
+
+        .message { text-align: center; margin-bottom: 15px; color: green; font-weight: 600; font-size: 0.95rem; }
+
+        /* Responsive */
+        @media(max-width: 1024px) {
+            .form-group { flex: 1 1 48%; }
+        }
+
+        @media(max-width: 768px) {
+            .container { padding: 20px; margin: 20px 10px; }
+            .form-group { flex: 1 1 100%; }
+            h2 { font-size: 1.6rem; }
+            .navbar a { font-size: 0.9rem; padding: 6px 10px; }
+            button { font-size: 15px; padding: 12px; }
+        }
+
+        @media(max-width: 480px) {
+            h2 { font-size: 1.4rem; margin-bottom: 20px; }
+            .navbar { gap: 8px; padding: 10px 5px; }
+            .navbar a { font-size: 0.85rem; padding: 5px 8px; }
+            button { font-size: 14px; padding: 10px; }
+            .gallery-preview { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar/navbar.html' %}
+
+    <div class="container">
+        <div class="corner-decor"></div>
+        <h2>Manage Your Vivah Profile</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Basic Info -->
+            <div class="section-title">Basic Info</div>
+            <div class="form-group"><label>First Name</label>
+                <input type="text" name="first_name" value="{{ first_name }}" required>
+            </div>
+            <div class="form-group"><label>Last Name</label>
+                <input type="text" name="last_name" value="{{ last_name }}">
+            </div>
+
+            <!-- Profile Image -->
+            <div class="form-group full-width">
+                <label>Profile Image</label>
+                <div class="image-preview" id="profilePreview">
+                    {% if form.instance.image %}
+                        <img src="{{ form.instance.image.url }}" alt="Profile Image">
+                    {% endif %}
+                </div>
+                <input type="file" name="image" id="id_image" accept="image/*" style="display:none;">
+                <label for="id_image">Choose Image</label>
+            </div>
+
+            <!-- Gallery Images -->
+            <div class="section-title">Gallery Images</div>
+            <div class="form-group full-width">
+                <div class="gallery-preview">
+                    {% if gallery_images %}
+                        {% for img in gallery_images %}
+                            <div>
+                                <img src="{{ img.image.url }}" alt="Gallery Image">
+                                <a href="{% url 'delete_gallery_image' img.uid %}" class="delete-btn">&times;</a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <input type="file" name="gallery_images" id="id_gallery_images" multiple accept="image/*" style="display:none;">
+                <label for="id_gallery_images">Upload Gallery Images</label>
+                <small style="display:block; margin-top:5px; color:#555;">You can select multiple images (maximum 4 in total).</small>
+            </div>
+
+            <!-- Gender / Age / Height / Weight -->
+            <div class="form-group"><label>Gender</label>{{ form.gender }}</div>
+            <div class="form-group"><label>Height (cm)</label>{{ form.height }}</div>
+            <div class="form-group"><label>Weight (kg)</label>{{ form.weight }}</div>
+            <div class="form-group">
+                <label>Date Of Birth</label>
+                <input type="date" name="dob" value="{{ form.dob.value }}" class="form-control">
+            </div>
+
+            <!-- Personal Info -->
+            <div class="section-title">Personal Info</div>
+            <div class="form-group"><label>Marital Status</label>{{ form.marital_status }}</div>
+            <div class="form-group"><label>Religion</label>{{ form.religion }}</div>
+            <div class="form-group"><label>Caste</label>{{ form.caste }}</div>
+            <div class="form-group"><label>Mother Tongue</label>{{ form.mother_tongue }}</div>
+
+            <!-- Education & Profession -->
+            <div class="section-title">Education & Profession</div>
+            <div class="form-group"><label>Education</label>{{ form.education }}</div>
+            <div class="form-group"><label>Occupation</label>{{ form.occupation }}</div>
+            <div class="form-group"><label>Annual Income</label>{{ form.annual_income }}</div>
+            <div class="form-group"><label>Company Name</label>{{ form.company_name }}</div>
+            <div class="form-group"><label>Working City</label>{{ form.working_city }}</div>
+
+            <!-- Contact & Location -->
+            <div class="section-title">Contact & Location</div>
+            <div class="form-group"><label>Phone Number</label>{{ form.phone_no }}</div>
+            <div class="form-group"><label>Country</label>{{ form.country }}</div>
+            <div class="form-group"><label>State</label>{{ form.state }}</div>
+            <div class="form-group"><label>City</label>{{ form.city }}</div>
+            <div class="form-group full-width"><label>Address</label>{{ form.address }}</div>
+
+            <!-- Lifestyle -->
+            <div class="section-title">Lifestyle</div>
+            <div class="form-group"><label>Diet</label>{{ form.diet }}</div>
+            <div class="form-group"><label>Smoking</label>{{ form.smoking }}</div>
+            <div class="form-group"><label>Drinking</label>{{ form.drinking }}</div>
+            <div class="form-group"><label>Hobbies</label>{{ form.hobbies }}</div>
+
+            <!-- Family Info -->
+            <div class="section-title">Family Info</div>
+            <div class="form-group"><label>Father Name</label>{{ form.father_name }}</div>
+            <div class="form-group"><label>Mother Name</label>{{ form.mother_name }}</div>
+            <div class="form-group"><label>Father Occupation</label>{{ form.father_occupation }}</div>
+            <div class="form-group"><label>Mother Occupation</label>{{ form.mother_occupation }}</div>
+            <div class="form-group"><label>Sisters</label>{{ form.sisters }}</div>
+            <div class="form-group"><label>Brothers</label>{{ form.brothers }}</div>
+            <div class="form-group"><label>Family Type</label>{{ form.family_type }}</div>
+
+            <!-- About -->
+            <div class="section-title">About</div>
+            <div class="form-group full-width"><label>About Me</label>{{ form.about_me }}</div>
+            <div class="form-group full-width"><label>Partner Preferences</label>{{ form.partner_preferences }}</div>
+
+            <button type="submit">Save Profile</button>
+        </form>
+    </div>
+
+    <!-- JS for live preview -->
+    <script>
+        // Profile image preview
+        const profileInput = document.getElementById('id_image');
+        const profilePreview = document.getElementById('profilePreview');
+
+        profileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePreview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Gallery image preview
+        const galleryInput = document.getElementById('id_gallery_images');
+        const galleryPreview = document.querySelector('.gallery-preview');
+        const maxImages = 4;
+
+        galleryInput.addEventListener('change', function() {
+            const existingCount = galleryPreview.querySelectorAll('img').length;
+            const newFiles = Array.from(this.files);
+            const total = existingCount + newFiles.length;
+
+            if (total > maxImages) {
+                alert(`You can upload up to ${maxImages} images in total.`);
+                this.value = '';
+                return;
+            }
+
+            newFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    galleryPreview.appendChild(imgDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html>

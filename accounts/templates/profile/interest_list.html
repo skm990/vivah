@@ -1,0 +1,292 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <title>Vivah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
+            min-height: 100vh;
+            position: relative;
+            padding-top: 70px; /* for navbar */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/gplay.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        /* Headings */
+        h1 {
+            text-align: center;
+            color: #d6336c;
+            font-family: 'Cinzel', serif;
+            margin: 25px 0;
+            font-size: 2rem;
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 1.6rem;
+            color: #d6336c;
+            margin: 40px 0 20px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Card Grid */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 15px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-content h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+            color: #d6336c;
+            font-family: 'Cinzel', serif;
+        }
+
+        .card-content p {
+            margin: 3px 0;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .status {
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status.pending { color: #ff9800; }
+        .status.accepted { color: #28a745; }
+        .status.rejected { color: #dc3545; }
+
+        .btn-container { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-accept { background: linear-gradient(90deg, #28a745, #5cd65c); }
+        .btn-accept:hover { background: linear-gradient(90deg, #218838, #4caf50); }
+        .btn-reject { background: linear-gradient(90deg, #dc3545, #ff5c5c); }
+        .btn-reject:hover { background: linear-gradient(90deg, #c82333, #ff4d4d); }
+
+        .btn-success {
+            background: linear-gradient(90deg,rgb(190, 226, 29), #5cd65c);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: linear-gradient(90deg,rgb(186, 212, 34), #4caf50);
+        }
+
+        .corner-decor {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 80px;
+            height: 80px;
+            background: url('https://cdn-icons-png.flaticon.com/512/990/990748.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.1;
+        }
+
+        @media(max-width: 480px) {
+            .btn-container { flex-direction: column; }
+            .btn { width: 100%; text-align: center; }
+        }
+
+                /* Chat + View Profile Buttons */
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-chat {
+            background: linear-gradient(90deg, #b6ff79, #4cd137);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-chat:hover {
+            background: linear-gradient(90deg, #a8eb5c, #44bd32);
+            transform: translateY(-2px);
+        }
+
+        .btn-view {
+            background: linear-gradient(90deg, #28a745, #66de5a);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-view:hover {
+            background: linear-gradient(90deg, #218838, #4caf50);
+            transform: translateY(-2px);
+        }
+
+        /* Keep spacing nice for small screens */
+        @media(max-width: 480px) {
+            .button-group {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar/navbar.html' %}
+
+    <h1>💞 My Interests</h1>
+    <div class="corner-decor"></div>
+
+    <h2 class="section-title">💌 Interests Received</h2>
+    <div class="container">
+        {% for interest in incoming_interests %}
+        <div class="card">
+            {% if interest.sender.profile.image %}
+            <img src="{{ interest.sender.profile.image.url }}" alt="Profile Image">
+            {% else %}
+            <img src="/static/images/default-profile.png" alt="Default">
+            {% endif %}
+            <div class="card-content">
+                <div>
+                    <h3>{{ interest.sender.first_name }} {{ interest.sender.last_name }}</h3>
+                    <p><strong>Age:</strong> {{ interest.sender.profile.age }}</p>
+                    <p><strong>Religion:</strong> {{ interest.sender.profile.religion }}</p>
+                    <p><strong>City:</strong> {{ interest.sender.profile.city }}</p>
+                    <p><strong>Status:</strong> 
+                        <span class="status {{ interest.status }}">{{ interest.status }}</span>
+                    </p>
+                </div>
+                <div class="btn-container">
+                    {% if interest.status == 'pending' %}
+                        <a href="{% url 'accept_interest' interest.id %}" class="btn btn-accept">Accept</a>
+                        <a href="{% url 'reject_interest' interest.id %}" class="btn btn-reject">Reject</a>
+                    {% elif interest.status == 'accepted' %}
+                        <span class="status accepted">✔ Accepted</span>
+                    {% elif interest.status == 'rejected' %}
+                        <span class="status rejected">✖ Rejected</span>
+                    {% endif %}
+                </div>
+               <div class="button-group">
+                    {% if interest.status == "accepted" %}
+                    <a href="{% url 'chat_view' interest.sender.username %}" class="btn btn-chat">
+                        💬 Chat
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'user_profile_detail' my_profile.uid %}" class="btn btn-view">
+                        👁️ View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align:center; grid-column:1/-1;">No interests received yet.</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title">💖 Interests You Expressed</h2>
+    <div class="container">
+        {% for interest in outgoing_interests %}
+        <div class="card">
+            {% if interest.receiver.image %}
+            <img src="{{ interest.receiver.image.url }}" alt="Profile Image">
+            {% else %}
+            <img src="/static/images/default-profile.png" alt="Default">
+            {% endif %}
+            <div class="card-content">
+                <h3>{{ interest.receiver.user.first_name }} {{ interest.receiver.user.last_name }}</h3>
+                <p><strong>Age:</strong> {{ interest.receiver.age }}</p>
+                <p><strong>Religion:</strong> {{ interest.receiver.religion }}</p>
+                <p><strong>City:</strong> {{ interest.receiver.city }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="status {{ interest.status }}">{{ interest.status }}</span>
+                </p>
+               <div class="button-group">
+                    {% if interest.status == "accepted" %}
+                        <a href="{% url 'chat_view' interest.sender.username %}" class="btn btn-chat">
+                            💬 Chat
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'user_profile_detail' my_profile.uid %}" class="btn btn-view">
+                        👁️ View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align:center; grid-column:1/-1;">You haven’t expressed interest in anyone yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

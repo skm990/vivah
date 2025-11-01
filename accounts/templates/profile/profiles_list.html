@@ -1,0 +1,454 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <title>Vivah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
+            min-height: 100vh;
+            position: relative;
+            padding-top: 80px; /* Enough space for fixed navbar */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/gplay.png');
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 50px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d6336c;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .filter-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-form select,
+        .filter-form input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            flex: 1 1 150px;
+            outline: none;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .filter-form select:focus,
+        .filter-form input:focus {
+            border-color: #d6336c;
+            box-shadow: 0 0 8px rgba(214,51,108,0.3);
+        }
+
+        .filter-form button {
+            padding: 12px 20px;
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1 1 100px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .filter-form button:hover { background: linear-gradient(90deg, #c2185b, #f06292); }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .profile-card:hover { transform: translateY(-5px); }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .gallery-container .main-image img {
+            width: 100%;
+            height: 400px;
+            max-height: 400px;
+            object-fit: contain;
+            border-bottom: 1px solid #eee;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-slider {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding: 8px;
+            background: #fafafa;
+            border-top: 1px solid #eee;
+        }
+
+        .gallery-slider::-webkit-scrollbar { height: 6px; }
+        .gallery-slider::-webkit-scrollbar-thumb {
+            background-color: #d6336c;
+            border-radius: 3px;
+        }
+
+        .gallery-slider img {
+            height: 70px;
+            width: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-slider img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 6px rgba(214,51,108,0.3);
+        }
+
+        .profile-info {
+            padding: 15px;
+        }
+
+        .profile-info h3 {
+            color: #d6336c;
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-family: 'Cinzel', serif;
+        }
+
+        .profile-info p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            align-items: stretch;
+        }
+
+        .btn-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .btn-wrapper a,
+        .btn-wrapper form {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn-wrapper form button,
+        .btn-wrapper a.action-btn,
+        .btn-wrapper button.action-btn {
+            flex: 1;
+            height: 46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .view-btn {
+            background: linear-gradient(90deg, #28a745, #5cd65c);
+        }
+        .view-btn:hover {
+            background: linear-gradient(90deg, #218838, #4caf50);
+        }
+
+        .interest-btn {
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+        }
+        .interest-btn:hover {
+            background: linear-gradient(90deg, #c2185b, #f06292);
+        }
+
+        .action-btn.disabled {
+            background: #ccc;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .pagination a {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 8px;
+            color: #d6336c;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .pagination a:hover,
+        .pagination .current {
+            background: #d6336c;
+            color: white;
+            border-color: #d6336c;
+        }
+
+        .corner-decor {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 80px;
+            height: 80px;
+            background: url('https://cdn-icons-png.flaticon.com/512/990/990748.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.1;
+        }
+
+        /* ✅ Responsive Fixes */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 90px;
+            }
+
+            .navbar {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 12px 10px;
+                gap: 15px;
+            }
+
+            .navbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .navbar a,
+            .navbar .nav-item {
+                flex-shrink: 0;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            h1 {
+                margin-top: 15px;
+                font-size: 22px;
+                padding: 0 10px;
+            }
+
+            .filter-form {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .filter-form select,
+            .filter-form input,
+            .filter-form button {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card .main-image img {
+                height: 300px;
+                object-fit: contain;
+            }
+
+            .profile-info p {
+                font-size: 13px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn-wrapper form button,
+            .btn-wrapper a.action-btn {
+                height: 44px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar/navbar.html' %}
+
+    <div class="container">
+        <div class="corner-decor"></div>
+        <h1>Find Your Perfect Match</h1>
+
+        <!-- Filter -->
+        <form method="get" class="filter-form">
+            <input type="number" name="min_age" placeholder="Min Age" value="{{ request.GET.min_age }}">
+            <input type="number" name="max_age" placeholder="Max Age" value="{{ request.GET.max_age }}">
+
+            <select name="caste">
+                <option value="">Caste</option>
+                {% for ca in castes %}
+                    <option value="{{ ca }}" {% if request.GET.caste == ca %}selected{% endif %}>{{ ca }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="country">
+                <option value="">Country</option>
+                {% for c in countries %}
+                    <option value="{{ c }}" {% if request.GET.country == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="state">
+                <option value="">State</option>
+                {% for s in states %}
+                    <option value="{{ s }}" {% if request.GET.state == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="city">
+                <option value="">City</option>
+                {% for ci in cities %}
+                    <option value="{{ ci }}" {% if request.GET.city == ci %}selected{% endif %}>{{ ci }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Profiles Grid -->
+        <div class="profiles-grid">
+            {% for profile in profiles %}
+            <div class="profile-card">
+                <div class="gallery-container">
+                    <div class="main-image">
+                        {% if profile.image %}
+                            <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}">
+                        {% else %}
+                            <img src="/static/images/default-profile.png" alt="Default Profile">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <h3>{{ profile.user.first_name }} {{ profile.user.last_name }}</h3>
+                    <p><strong>Gender:</strong> {{ profile.gender }}</p>
+                    <p><strong>Date Of Birth:</strong> {{ profile.dob }}</p>
+                    <p><strong>Age:</strong> {{ profile.age }}</p>
+                    <p><strong>Height:</strong> {{ profile.height }} cm</p>
+                    <p><strong>Marital Status:</strong> {{ profile.marital_status }}</p>
+                    <p><strong>Religion:</strong> {{ profile.religion }}</p>
+                    <p><strong>Caste:</strong> {{ profile.caste }}</p>
+                    <p><strong>Education:</strong> {{ profile.education }}</p>
+                    <p><strong>Occupation:</strong> {{ profile.occupation }}</p>
+                    <p><strong>Annual Income:</strong> {{ profile.annual_income }}</p>
+                    <p><strong>City:</strong> {{ profile.city }}, {{ profile.state }}, {{ profile.country }}</p>
+                    <div class="action-buttons">
+                        <div class="btn-wrapper">
+                            <a href="{% url 'user_profile_detail' profile.uid %}" class="action-btn view-btn">👁️ View Profile</a>
+                        </div>
+                        {% if access_premium == 1 %}
+                        <div class="btn-wrapper">
+                            <a href="{% url 'chat_view' profile.user.username %}" class="action-btn view-btn">💬 Chat</a>                            
+                        </a>
+                        </div>
+                        {% endif %}
+                        <div class="btn-wrapper">
+                            {% if request.user.is_authenticated %}
+                                {% if profile.id in sent_interest_ids %}
+                                    <button class="action-btn interest-btn disabled" disabled>❤️ Interest Sent</button>
+                                {% else %}
+                                    {% if access_today < 3 %}
+                                    <form method="post" action="{% url 'send_interest' profile.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-btn interest-btn">❤️ Express Interest</button>
+                                    </form>
+                                    {% elif access_premium == 1 %}
+                                    <form method="post" action="{% url 'send_interest' profile.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-btn interest-btn">❤️ Express Interest</button>
+                                    </form>
+                                    {% else %}
+                                    <button class="action-btn interest-btn disabled" disabled>❤️ Daily Limit Reached</button>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'login' %}" class="action-btn interest-btn">Login to Express Interest</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No profiles found matching your criteria.</p>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if profiles.has_previous %}
+                <a href="?page={{ profiles.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; Prev</a>
+            {% endif %}
+            <span class="current">Page {{ profiles.number }} of {{ profiles.paginator.num_pages }}</span>
+            {% if profiles.has_next %}
+                <a href="?page={{ profiles.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next &raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
