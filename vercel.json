@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "vivah/asgi.py", "use": "@vercel/python" },
-    { "src": "manage.py", "use": "@vercel/python" }
-  ],
+  "buildCommand": "python manage.py collectstatic --noinput",
+  "outputDirectory": "staticfiles",
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.12"
+    }
+  },
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/(.*)", "dest": "vivah/asgi.py" }
-  ],
-  "buildCommand": "python manage.py collectstatic --noinput",
-  "outputDirectory": "staticfiles"
+  ]
 }
