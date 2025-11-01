@@ -142,7 +142,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://6bcff533543f.ngrok-free.app',
+    'https://vivah-oqd3.vercel.app',
 ]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 
