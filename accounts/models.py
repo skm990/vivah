@@ -563,3 +563,40 @@ class PremiumUser(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {'Premium' if self.is_premium else 'Standard'}"
+
+    def save(self, *args, **kwargs):
+        # Save normally first if new file not yet saved
+        if self.receipt:
+            self.receipt = self.compress_receipt(self.receipt)
+        super().save(*args, **kwargs)
+
+    def compress_receipt(self, uploaded_image):
+        """Compress uploaded image to under 200 KB and standard size."""
+        image_temp = Image.open(uploaded_image)
+        image_format = image_temp.format  # e.g., JPEG, PNG
+
+        # Convert all images to RGB (for JPEG)
+        if image_temp.mode in ("RGBA", "P"):
+            image_temp = image_temp.convert("RGB")
+
+        # Resize to standard size (maintain aspect ratio)
+        image_temp.thumbnail((self.STANDARD_WIDTH, self.STANDARD_HEIGHT))
+
+        # Compress until under 200 KB
+        buffer = io.BytesIO()
+        quality = 85  # start quality
+        image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
+        
+        while buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024 and quality > 30:
+            buffer = io.BytesIO()
+            quality -= 5
+            image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
+
+        if buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024:
+            raise ValidationError("Image cannot be compressed below 200 KB. Please upload a smaller image.")
+
+        # Create new Django file
+        compressed_image = ContentFile(buffer.getvalue())
+        new_filename = f"{uuid.uuid4()}.jpg"
+
+        return ContentFile(buffer.getvalue(), name=new_filename)
