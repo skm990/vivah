@@ -2,6 +2,10 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -11,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m!a^8g0r!@kqpdek)@1&8#8g_-2^$)e0ms2zjtam$&x_)*nl40'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -29,6 +33,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'cloudinary',
+    'cloudinary_storage',
     'accounts',
 ]
 
@@ -109,14 +115,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 1
@@ -146,3 +144,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://6bcff533543f.ngrok-free.app',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+# Use Cloudinary for file storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Your Cloudinary credentials
+CLOUDINARY_URL = "cloudinary://238558167885298:0hsXpaKoavlE-_svZCFsGY1oscg@dip3hs9cy"
