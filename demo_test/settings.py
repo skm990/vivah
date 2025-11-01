@@ -150,9 +150,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 #  Cloudinary configuration
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dip3hs9cy',
-    'API_KEY': '238558167885298',
-    'API_SECRET': '0hsXpaKoavlE-_svZCFsGY1oscg',
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
 # Use Cloudinary for file storage
