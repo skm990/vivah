@@ -81,3 +81,5 @@ dist/
 MANIFEST
 
 staticfiles/
+
+.envrc
