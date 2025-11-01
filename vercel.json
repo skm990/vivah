@@ -7,5 +7,7 @@
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/(.*)", "dest": "vivah/asgi.py" }
-  ]
+  ],
+  "buildCommand": "python manage.py collectstatic --noinput",
+  "outputDirectory": "staticfiles"
 }
