@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import UserAccount, UserOtp, UserProfile
 
 class SendOtpSerializer(serializers.Serializer):
     email = serializers.EmailField()

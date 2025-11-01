@@ -1,5 +1,4 @@
-from django.core.mail import get_connection, send_mail, EmailMultiAlternatives
-from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 

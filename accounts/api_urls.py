@@ -18,7 +18,7 @@ from .views import (
     chat_home,
     premium_form_view,
 )
-from django.contrib.auth import views as auth_views
+
 
 
 urlpatterns = [

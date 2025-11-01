@@ -3,7 +3,6 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserOtp, UserAccount, WelcomeMail, UserProfile, ProfileInterest, UploadImage, ChatMessage, PremiumUser
