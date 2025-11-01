@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_auth',
-    'corsheaders',
-    'allauth.socialaccount.providers.google',
     'rest_framework',
     'drf_yasg',
     'ckeditor',  # Ensure CKEditor is also added if not already
