@@ -240,6 +240,19 @@
                 icon.textContent = '👁️';
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const button = form.querySelector("button[type='submit']");
+
+            form.addEventListener("submit", function() {
+                // Change button state
+                button.disabled = true;
+                button.innerText = "Verifing...";
+                button.style.opacity = "0.7";
+                button.style.cursor = "not-allowed";
+            });
+        });
     </script>
 </body>
 </html>

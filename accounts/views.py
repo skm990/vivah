@@ -18,6 +18,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Count
 from django.db.models.functions import Greatest
 import threading
+import os
 
 User = get_user_model()
 
@@ -85,7 +86,7 @@ def verify_otp_view(request):
 
                 login(request, user)
                 messages.success(request, "OTP verified and password set successfully!")
-                return redirect('create_profile')
+                return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid or expired OTP.")
     else:
@@ -105,7 +106,7 @@ def login_view(request):
             if user:
                 login(request, user)
                 messages.success(request, "Login successful!")
-                return redirect('create_profile')
+                return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid email or password.")
     else:
@@ -159,7 +160,11 @@ def create_profile_view(request):
 def delete_gallery_image(request, uid):
     # Fetch by uid and make sure it belongs to the logged-in user
     img = get_object_or_404(UploadImage, uid=uid, galary__user=request.user)
+    image_path = img.image.path if img.image else None
     img.delete()
+    # Delete file from storage (if exists)
+    if image_path and os.path.exists(image_path):
+        os.remove(image_path)
     messages.success(request, "Image deleted successfully!")
     return redirect('create_profile')
 
@@ -394,7 +399,7 @@ def feedback_view(request):
             if request.user.is_authenticated:
                 feedback.user = request.user
             feedback.save()
-            return redirect('feedback')
+            return redirect('profiles_list')
     else:
         form = FeedbackForm()
 

@@ -12,24 +12,18 @@ from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
 from datetime import date
 from django.utils.timezone import now
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
-from io import BytesIO
 from PIL import Image
 import uuid
-import sys
 
 
-# =====================
-# USER MANAGER
-# =====================
+
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
         if not email:
             raise ValueError('Users must have a valid email address.')
         if not kwargs.get('username'):
             raise ValueError('Users must have a valid username.')
-
         account = self.model(
             email=self.normalize_email(email),
             username=kwargs.get('username')
@@ -46,9 +40,6 @@ class UserAccountManager(BaseUserManager):
         return account
 
 
-# =====================
-# USER MODEL
-# =====================
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     username = models.CharField(
@@ -83,24 +74,21 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return f"{self.first_name} {self.last_name or ''}".strip()
 
 
-# =====================
-# UTILITIES
-# =====================
 def key_generator(size=10, prefix="VIVAH"):
     suffix_size = size - len(prefix)
     suffix = ''.join(random.SystemRandom().choice(string.digits) for _ in range(suffix_size))
     return f"{prefix}{suffix}"
-
 
 def user_profile_image_upload_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = f"{instance.uid}.{ext}"
     return os.path.join('uploads/user_profile/images/', filename)
 
+def user_profile_identity_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f"{instance.uid}.{ext}"
+    return os.path.join('uploads/identity/images/', filename)
 
-# =====================
-# MATRIMONY USER PROFILE
-# =====================
 class UserProfile(models.Model):
     GENDER_CHOICES = [
         ('Male', 'Male'),
@@ -249,10 +237,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
     image = models.ImageField(upload_to=user_profile_image_upload_path, null=True, blank=True)
     user_identity = models.CharField(db_index=True, unique=True, max_length=10, default=key_generator, editable=False)
-
     # Personal Info
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     age = models.PositiveIntegerField(null=True, blank=True)
+    identity_proof = models.ImageField(upload_to=user_profile_identity_upload_path, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True, help_text="Height in cm")
     weight = models.FloatField(null=True, blank=True, help_text="Weight in kg")
@@ -260,27 +248,23 @@ class UserProfile(models.Model):
     religion = models.CharField(max_length=50, choices=RELIGION_CHOICES, null=True, blank=True)
     caste = models.CharField(max_length=100, choices=CASTE_CHOICES, null=True, blank=True)
     mother_tongue = models.CharField(max_length=100, null=True, blank=True)
-
     # Education & Profession
     education = models.CharField(max_length=100, choices=EDUCATION_CHOICES, null=True, blank=True)
     occupation = models.CharField(max_length=100, choices=OCCUPATION_CHOICES, null=True, blank=True)
     annual_income = models.CharField(max_length=50, choices=ANNUAL_INCOME_CHOICES, null=True, blank=True)
     company_name = models.CharField(max_length=255, null=True, blank=True)
     working_city = models.CharField(max_length=255, null=True, blank=True)
-
     # Contact & Location
     phone_no = models.CharField(max_length=15, null=True, blank=True)
     address = models.CharField(max_length=1000, null=True, blank=True)
     country = models.CharField(max_length=255, choices=COUNTRY_CHOICES, null=True, blank=True)
     state = models.CharField(max_length=255, choices=STATE_CHOICES, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
-
     # Lifestyle
     diet = models.CharField(max_length=50, null=True, blank=True, choices=[('Veg', 'Veg'), ('Non-Veg', 'Non-Veg'), ('Eggetarian', 'Eggetarian')])
     smoking = models.CharField(max_length=50, null=True, blank=True, choices=[('No', 'No'), ('Occasionally', 'Occasionally'), ('Yes', 'Yes')])
     drinking = models.CharField(max_length=50, null=True, blank=True, choices=[('No', 'No'), ('Occasionally', 'Occasionally'), ('Yes', 'Yes')])
     hobbies = models.CharField(max_length=1000, null=True, blank=True,)
-
     # Family Info
     father_name = models.CharField(max_length=255, null=True, blank=True)
     mother_name = models.CharField(max_length=255, null=True, blank=True)
@@ -289,11 +273,9 @@ class UserProfile(models.Model):
     sisters = models.PositiveIntegerField(default=0)
     brothers = models.PositiveIntegerField(default=0)
     family_type = models.CharField(max_length=50, choices=[('Joint', 'Joint'), ('Nuclear', 'Nuclear')], null=True, blank=True)
-
     # About
     about_me = models.TextField(null=True, blank=True)
     partner_preferences = models.TextField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -311,51 +293,50 @@ class UserProfile(models.Model):
             return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
         return None
 
-    
     def save(self, *args, **kwargs):
-        """Compress and replace the uploaded image before saving."""
+        if self.pk:  # check if this is an update
+            try:
+                old_instance = UserProfile.objects.get(pk=self.pk)
+                if old_instance.image and old_instance.image != self.image:
+                    if os.path.exists(old_instance.image.path):
+                        os.remove(old_instance.image.path)
+            except UserProfile.DoesNotExist:
+                pass  # new object, no old image to delete
+        try:
+            old_instance = UserProfile.objects.get(pk=self.pk)
+            if old_instance.identity_proof and old_instance.identity_proof != self.identity_proof:
+                if os.path.exists(old_instance.identity_proof.path):
+                    os.remove(old_instance.identity_proof.path)
+        except UserProfile.DoesNotExist:
+            pass  # new object, no old image to delete
+        # Save normally first if new file not yet saved
         if self.image:
             self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, uploaded_image):
         """Compress uploaded image to under 200 KB and standard size."""
-        # Open uploaded image
         image_temp = Image.open(uploaded_image)
-
-        # Convert to RGB (JPEG-safe)
+        image_format = image_temp.format  # e.g., JPEG, PNG
+        # Convert all images to RGB (for JPEG)
         if image_temp.mode in ("RGBA", "P"):
             image_temp = image_temp.convert("RGB")
-
-        # Resize proportionally
+        # Resize to standard size (maintain aspect ratio)
         image_temp.thumbnail((self.STANDARD_WIDTH, self.STANDARD_HEIGHT))
-
-        # Compress
-        buffer = BytesIO()
-        quality = 85
+        # Compress until under 200 KB
+        buffer = io.BytesIO()
+        quality = 85  # start quality
         image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-
-        # Keep compressing until under 200 KB
         while buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024 and quality > 30:
-            buffer = BytesIO()
+            buffer = io.BytesIO()
             quality -= 5
             image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-
         if buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024:
             raise ValidationError("Image cannot be compressed below 200 KB. Please upload a smaller image.")
-
-        # ✅ Use InMemoryUploadedFile (required for Vercel/Cloudinary)
-        new_filename = f"{self.uid}.jpg"  # keep your instance.uid-based naming
-        buffer.seek(0)
-        compressed_image = InMemoryUploadedFile(
-            file=buffer,
-            field_name='ImageField',
-            name=new_filename,
-            content_type='image/jpeg',
-            size=sys.getsizeof(buffer),
-            charset=None,
-        )
-        return compressed_image
+        # Create new Django file
+        compressed_image = ContentFile(buffer.getvalue())
+        new_filename = f"{uuid.uuid4()}.jpg"
+        return ContentFile(buffer.getvalue(), name=new_filename)
 
     class Meta:
         verbose_name = 'User Profile'
@@ -386,31 +367,24 @@ class UploadImage(models.Model):
         """Compress uploaded image to under 200 KB and standard size."""
         image_temp = Image.open(uploaded_image)
         image_format = image_temp.format  # e.g., JPEG, PNG
-
         # Convert all images to RGB (for JPEG)
         if image_temp.mode in ("RGBA", "P"):
             image_temp = image_temp.convert("RGB")
-
         # Resize to standard size (maintain aspect ratio)
         image_temp.thumbnail((self.STANDARD_WIDTH, self.STANDARD_HEIGHT))
-
         # Compress until under 200 KB
         buffer = io.BytesIO()
         quality = 85  # start quality
         image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-        
         while buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024 and quality > 30:
             buffer = io.BytesIO()
             quality -= 5
             image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-
         if buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024:
             raise ValidationError("Image cannot be compressed below 200 KB. Please upload a smaller image.")
-
         # Create new Django file
         compressed_image = ContentFile(buffer.getvalue())
         new_filename = f"{uuid.uuid4()}.jpg"
-
         return ContentFile(buffer.getvalue(), name=new_filename)
 
 
@@ -578,6 +552,14 @@ class PremiumUser(models.Model):
         return f"{self.user.username} - {'Premium' if self.is_premium else 'Standard'}"
 
     def save(self, *args, **kwargs):
+        if self.pk:  # check if this is an update
+            try:
+                old_instance = PremiumUser.objects.get(pk=self.pk)
+                if old_instance.receipt and old_instance.receipt != self.receipt:
+                    if os.path.exists(old_instance.receipt.path):
+                        os.remove(old_instance.receipt.path)
+            except UserProfile.DoesNotExist:
+                pass  # new object, no old image to delete
         # Save normally first if new file not yet saved
         if self.receipt:
             self.receipt = self.compress_receipt(self.receipt)
@@ -587,29 +569,22 @@ class PremiumUser(models.Model):
         """Compress uploaded image to under 200 KB and standard size."""
         image_temp = Image.open(uploaded_image)
         image_format = image_temp.format  # e.g., JPEG, PNG
-
         # Convert all images to RGB (for JPEG)
         if image_temp.mode in ("RGBA", "P"):
             image_temp = image_temp.convert("RGB")
-
         # Resize to standard size (maintain aspect ratio)
         image_temp.thumbnail((self.STANDARD_WIDTH, self.STANDARD_HEIGHT))
-
         # Compress until under 200 KB
         buffer = io.BytesIO()
         quality = 85  # start quality
         image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-        
         while buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024 and quality > 30:
             buffer = io.BytesIO()
             quality -= 5
             image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-
         if buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024:
             raise ValidationError("Image cannot be compressed below 200 KB. Please upload a smaller image.")
-
         # Create new Django file
         compressed_image = ContentFile(buffer.getvalue())
         new_filename = f"{uuid.uuid4()}.jpg"
-
         return ContentFile(buffer.getvalue(), name=new_filename)
