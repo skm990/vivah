@@ -18,15 +18,10 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Count
 from django.db.models.functions import Greatest
 import threading
-import os
 
 User = get_user_model()
 
 
-
-# ----------------------
-# Step 1: Request OTP
-# ----------------------
 def request_otp_view(request):
     if request.method == "POST":
         form = EmailForm(request.POST)
@@ -36,15 +31,11 @@ def request_otp_view(request):
                 email=email,
                 defaults={'username': email.split('@')[0]}
             )
-            # Send Welcome mail if first-time
             if created:
                 WelcomeMail.objects.create(user=user, welcome=False)
-                messages.success(request, "Welcome email sent!")
-
-            # Generate OTP
+                # messages.success(request, "Welcome email sent!")
             otp = get_random_string(length=6, allowed_chars='1234567890')
             UserOtp.objects.create(user=user, otp=otp)
-#         send_dynamic_email(subject, message, [user.email], smtp_key="account2")
             send_otp_email(email, otp, user_name=user.get_full_name() or "User")
             request.session['email'] = email
             return redirect('verify_otp')
@@ -52,14 +43,11 @@ def request_otp_view(request):
         form = EmailForm()
     return render(request, "auth/request_otp.html", {"form": form})
 
-# ----------------------
-# Step 2: Verify OTP & Set Password
-# ----------------------
+
 def verify_otp_view(request):
     email = request.session.get('email')
     if not email:
         return redirect('request_otp')
-
     if request.method == "POST":
         form = OtpForm(request.POST)
         if form.is_valid():
@@ -71,21 +59,17 @@ def verify_otp_view(request):
                 otp_verified=False,
                 created_at__gte=now()-timedelta(minutes=10)
             ).order_by('-created_at').first()
-
             if user_otp and user_otp.otp == otp_input:
                 user.set_password(password)
                 user.save()
                 user_otp.otp_verified = True
                 user_otp.save()
-
-                # Mark email verified
                 obj, _ = EmailAddress.objects.get_or_create(email=email, user=user)
                 obj.primary = True
                 obj.verified = True
                 obj.save()
-
                 login(request, user)
-                messages.success(request, "OTP verified and password set successfully!")
+                # messages.success(request, "OTP verified and password set successfully!")
                 return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid or expired OTP.")
@@ -93,9 +77,7 @@ def verify_otp_view(request):
         form = OtpForm()
     return render(request, "auth/verify_otp.html", {"form": form})
 
-# ----------------------
-# Step 3: Login (Subsequent)
-# ----------------------
+
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -105,7 +87,7 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                messages.success(request, "Login successful!")
+                # messages.success(request, "Login successful!")
                 return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid email or password.")
@@ -113,40 +95,31 @@ def login_view(request):
         form = LoginForm()
     return render(request, "auth/login.html", {"form": form})
 
-# ----------------------
-# Step 4: Create/Update Profile
-# ----------------------
+
 @login_required
 def create_profile_view(request):
     user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
-
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         images = request.FILES.getlist('gallery_images')  # multiple images
         first_name = request.POST.get("first_name", "").strip()
         last_name = request.POST.get("last_name", "").strip()
-
         if form.is_valid():
             profile = form.save()
-
             # Update first_name and last_name
             user = request.user
             user.first_name = first_name
             user.last_name = last_name
             user.save()
-
             # Save uploaded gallery images
             for img in images:
                 UploadImage.objects.create(galary=profile, image=img)
-
-            messages.success(request, "Profile saved successfully!")
+            # messages.success(request, "Profile saved successfully!")
             return redirect('profiles_list')
     else:
         form = UserProfileForm(instance=user_profile)
-
     # Existing uploaded gallery images
     gallery_images = user_profile.user_profile.all()  # related_name in UploadImage
-
     context = {
         "form": form,
         "first_name": request.user.first_name,
@@ -158,14 +131,9 @@ def create_profile_view(request):
 
 @login_required
 def delete_gallery_image(request, uid):
-    # Fetch by uid and make sure it belongs to the logged-in user
     img = get_object_or_404(UploadImage, uid=uid, galary__user=request.user)
-    image_path = img.image.path if img.image else None
     img.delete()
-    # Delete file from storage (if exists)
-    if image_path and os.path.exists(image_path):
-        os.remove(image_path)
-    messages.success(request, "Image deleted successfully!")
+    # messages.success(request, "Image deleted successfully!")
     return redirect('create_profile')
 
 
@@ -174,11 +142,11 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
+
 from django.utils.timezone import now
 
 @login_required
 def profiles_list(request):
-    # Get filter values from GET params
     gender = request.GET.get('gender')
     min_age = request.GET.get('min_age')
     max_age = request.GET.get('max_age')
@@ -186,14 +154,12 @@ def profiles_list(request):
     country = request.GET.get('country')
     state = request.GET.get('state')
     city = request.GET.get('city')
-
     # --- Check if user has sent interest today ---
     today = now().date()
     access_today = ProfileInterest.objects.filter(
         sender=request.user,
         created_at__date=today
     ).count()
-
     # Start with all profiles
     profiles = (
         UserProfile.objects
@@ -201,7 +167,6 @@ def profiles_list(request):
         .prefetch_related('user_profile')  # Fetch gallery images efficiently
         .all()
     )
-
     # --- 🔹 Filter opposite gender ---
     try:
         current_user_profile = UserProfile.objects.get(user=request.user)
@@ -213,10 +178,8 @@ def profiles_list(request):
             profiles = profiles.exclude(user=request.user)  # show all except self if 'Other'
     except UserProfile.DoesNotExist:
         pass  # no user profile, show all
-
     # --- 🔹 Exclude own profile ---
     profiles = profiles.exclude(user=request.user)
-
     # --- Apply filters from GET form ---
     if gender:
         profiles = profiles.filter(gender__iexact=gender)
@@ -232,7 +195,6 @@ def profiles_list(request):
         profiles = profiles.filter(state__icontains=state)
     if city:
         profiles = profiles.filter(city__icontains=city)
-
     # --- Dropdown values ---
     countries = (
         UserProfile.objects.values_list('country', flat=True)
@@ -262,22 +224,18 @@ def profiles_list(request):
         .exclude(caste__exact='')
         .order_by('caste')
     )
-
     # --- Pagination ---
     paginator = Paginator(profiles, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
     # --- Interests (already sent) ---
     sent_interest_ids = []
     if request.user.is_authenticated:
         sent_interest_ids = ProfileInterest.objects.filter(sender=request.user).values_list('receiver_id', flat=True)
-
     # --- Check for active premium subscription ---
     active_premium = PremiumUser.objects.filter(
         user=request.user, is_premium=True, expiry_date__gt=now().date()
     ).first()
-
     context = {
         'profiles': page_obj,
         'countries': countries,
@@ -296,25 +254,17 @@ def send_interest(request, profile_id):
     receiver_profile = get_object_or_404(UserProfile, id=profile_id)
     ProfileInterest.objects.create(sender=request.user, receiver=receiver_profile)
     sender_profile = get_object_or_404(UserProfile, user=request.user)
-
     # Run email sending in background thread
     threading.Thread(
         target=send_interest_email,
         args=(receiver_profile, request.user, sender_profile)
     ).start()
-
-    # Prevent user from sending interest to their own profile
-    if receiver_profile.user == request.user:
-        messages.warning(request, "You cannot express interest in your own profile.")
-        return redirect(request.META.get('HTTP_REFERER', 'profiles_list'))
-
     # Check if interest already exists
     if ProfileInterest.objects.filter(sender=request.user, receiver=receiver_profile).exists():
         messages.info(request, "You already expressed interest in this profile.")
     else:
         ProfileInterest.objects.create(sender=request.user, receiver=receiver_profile)
         messages.success(request, f"Interest sent to {receiver_profile.user.get_full_name()} successfully!")
-
     return redirect(request.META.get('HTTP_REFERER', 'profiles_list'))
 
 
@@ -326,13 +276,10 @@ def interest_list(request):
     except UserProfile.DoesNotExist:
         messages.warning(request, "You must complete your profile first.")
         return redirect('create_profile')
-
     # Incoming: users who sent interest to me
     incoming_interests = ProfileInterest.objects.filter(receiver=my_profile)
-
     # Outgoing: interests I sent to others
     outgoing_interests = ProfileInterest.objects.filter(sender=request.user)
-
     context = {
         'incoming_interests': incoming_interests,
         'outgoing_interests': outgoing_interests,
@@ -352,8 +299,7 @@ def accept_interest(request, interest_id):
         target=send_interest_accept_email,
         args=(receiver_profile, interest.sender.email, interest.sender.first_name)
     ).start()
-
-    messages.success(request, "Interest accepted successfully!")
+    # messages.success(request, "Interest accepted successfully!")
     return redirect(request.META.get('HTTP_REFERER', 'interest_list'))
 
 
@@ -362,7 +308,7 @@ def reject_interest(request, interest_id):
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'rejected'
     interest.save()
-    messages.error(request, "Interest rejected.")
+    # messages.error(request, "Interest rejected.")
     return redirect(request.META.get('HTTP_REFERER', 'interest_list'))
 
 
@@ -402,7 +348,6 @@ def feedback_view(request):
             return redirect('profiles_list')
     else:
         form = FeedbackForm()
-
     return render(request, 'feedback.html', {'form': form})
 
 
@@ -414,7 +359,6 @@ def user_profile_detail(request, uid):
         uid=uid
     )
     gallery_images = UploadImage.objects.filter(galary=profile)
-
     context = {
         'profile': profile,
         'gallery_images': gallery_images,
@@ -432,19 +376,16 @@ def chat_view(request, receiver_email):
         sender__in=[request.user, receiver],
         receiver__in=[request.user, receiver]
     ).order_by('timestamp')
-
     # Mark receiver’s unread messages as seen
     ChatMessage.objects.filter(
         sender=receiver, receiver=request.user, seen=False
     ).update(seen=True)
-
     # Handle new message
     if request.method == "POST":
         text = request.POST.get('message')
         if text:
             ChatMessage.objects.create(sender=request.user, receiver=receiver, message=text)
         return redirect('chat_view', receiver_email=receiver.username)
-
     return render(request, 'chat/chat.html', {
         'receiver': receiver,
         'messages': messages,
@@ -471,14 +412,12 @@ def chat_home(request):
     chat_partners = ChatMessage.objects.filter(
         Q(sender=request.user) | Q(receiver=request.user)
     ).values_list('sender', 'receiver', named=True)
-
     user_ids = set()
     for c in chat_partners:
         if c.sender != request.user.id:
             user_ids.add(c.sender)
         if c.receiver != request.user.id:
             user_ids.add(c.receiver)
-
     # Prepare unseen count per sender
     unseen_counts = (
         ChatMessage.objects.filter(receiver=request.user, seen=False)
@@ -486,7 +425,6 @@ def chat_home(request):
         .annotate(total=Count('id'))
     )
     unseen_dict = {u['sender']: u['total'] for u in unseen_counts}
-
     # Get user list and annotate with latest message time
     users = (
         User.objects.filter(id__in=user_ids)
@@ -497,7 +435,6 @@ def chat_home(request):
             )
         )
     )
-
     # Add unread indicator manually
     user_data = []
     for u in users:
@@ -510,7 +447,6 @@ def chat_home(request):
         )
         unseen_count = unseen_dict.get(u.id, 0)
         has_unread = unseen_count > 0
-
         user_data.append({
             'user': u,
             'last_message': last_msg.message if last_msg else '',
@@ -518,10 +454,10 @@ def chat_home(request):
             'unseen_count': unseen_count,
             'has_unread': has_unread,
         })
-
     # ✅ Sort unread first, then by timestamp (newest first)
     user_data.sort(key=lambda x: (not x['has_unread'], x['timestamp'] or 0), reverse=False)
     return render(request, 'chat/chat_list.html', {'user_data': user_data})
+
 
 from django.http import JsonResponse
 
@@ -539,7 +475,6 @@ def premium_form_view(request):
             'active_premium': active_premium,
             'all_payments': all_payments
         })
-
     if request.method == "POST":
         form = PremiumUserForm(request.POST, request.FILES)
         if form.is_valid():
@@ -550,6 +485,5 @@ def premium_form_view(request):
         else:
             print(form.errors.as_json())
             return JsonResponse({'success': False, 'errors': form.errors})
-
     form = PremiumUserForm()
     return render(request, 'premium/premium_form.html', {'form': form})

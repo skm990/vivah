@@ -294,21 +294,19 @@ class UserProfile(models.Model):
         return None
 
     def save(self, *args, **kwargs):
-        if self.pk:  # check if this is an update
+        if self.pk:  # update case only
             try:
                 old_instance = UserProfile.objects.get(pk=self.pk)
+                # Delete old profile image if replaced
                 if old_instance.image and old_instance.image != self.image:
                     if os.path.exists(old_instance.image.path):
                         os.remove(old_instance.image.path)
+                # Delete old identity proof if replaced
+                if old_instance.identity_proof and old_instance.identity_proof != self.identity_proof:
+                    if os.path.exists(old_instance.identity_proof.path):
+                        os.remove(old_instance.identity_proof.path)
             except UserProfile.DoesNotExist:
-                pass  # new object, no old image to delete
-        try:
-            old_instance = UserProfile.objects.get(pk=self.pk)
-            if old_instance.identity_proof and old_instance.identity_proof != self.identity_proof:
-                if os.path.exists(old_instance.identity_proof.path):
-                    os.remove(old_instance.identity_proof.path)
-        except UserProfile.DoesNotExist:
-            pass  # new object, no old image to delete
+                pass  # new instance
         # Save normally first if new file not yet saved
         if self.image:
             self.image = self.compress_image(self.image)
@@ -358,6 +356,14 @@ class UploadImage(models.Model):
         return str(self.uid)
 
     def save(self, *args, **kwargs):
+        if self.pk:  # check if this is an update
+            try:
+                old_instance = UploadImage.objects.get(pk=self.pk)
+                if old_instance.image and old_instance.image != self.image:
+                    if os.path.exists(old_instance.image.path):
+                        os.remove(old_instance.image.path)
+            except UserProfile.DoesNotExist:
+                pass  # new object, no old image to delete
         # Save normally first if new file not yet saved
         if self.image:
             self.image = self.compress_image(self.image)
