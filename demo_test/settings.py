@@ -5,7 +5,9 @@ from decouple import config
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,8 +19,12 @@ SECRET_KEY = 'django-insecure-m!a^8g0r!@kqpdek)@1&8#8g_-2^$)e0ms2zjtam$&x_)*nl40
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.vercel.app',
+    os.getenv('VERCEL_URL', '').replace('https://', '').replace('http://', '')
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -143,6 +149,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://6bcff533543f.ngrok-free.app',
+    'https://vivah-delta.vercel.app',
     'https://vivah-oqd3.vercel.app',
     'https://res.cloudinary.com',
 ]
@@ -156,10 +163,25 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
-# Use Cloudinary for file storage
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Your Cloudinary credentials
-CLOUDINARY_URL = "cloudinary://238558167885298:0hsXpaKoavlE-_svZCFsGY1oscg@dip3hs9cy"
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Ensure Cloudinary becomes the active default storage
+from django.core.files.storage import storages
+
+storages.backends['default'] = {
+    'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+}
+
+
+
+# for image storage path testing
+# from django.core.files.storage import default_storage
+# print(default_storage.__class__.__name__)

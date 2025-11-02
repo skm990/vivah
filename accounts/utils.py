@@ -13,7 +13,7 @@ def send_interest_email(receiver_profile, sender_user, sender_profile):
         {
             'receiver_name': receiver_profile.user.first_name,
             'sender_name': sender_user.first_name,
-            'login_url': "https://5955c449dbef.ngrok-free.app",  # replace with live URL
+            'login_url': "https://vivah-delta.vercel.app",  # replace with live URL
         }
     )
     text_content = (
@@ -44,7 +44,7 @@ def send_interest_accept_email(receiver_profile, email, sender_first_name):
         {
             'receiver_name': receiver_profile.user.first_name,
             'sender_name': sender_first_name,
-            'login_url': "https://5955c449dbef.ngrok-free.app",  # replace with live URL
+            'login_url': "https://vivah-delta.vercel.app",  # replace with live URL
         }
     )
     text_content = (
