@@ -347,7 +347,6 @@ class UserProfile(models.Model):
         # ✅ Use InMemoryUploadedFile (required for Vercel/Cloudinary)
         new_filename = f"{self.uid}.jpg"  # keep your instance.uid-based naming
         buffer.seek(0)
-
         compressed_image = InMemoryUploadedFile(
             file=buffer,
             field_name='ImageField',
