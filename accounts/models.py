@@ -12,7 +12,12 @@ from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
 from datetime import date
 from django.utils.timezone import now
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.exceptions import ValidationError
+from io import BytesIO
+from PIL import Image
+import uuid
+import sys
 
 
 # =====================
@@ -308,41 +313,50 @@ class UserProfile(models.Model):
 
     
     def save(self, *args, **kwargs):
-        # Save normally first if new file not yet saved
+        """Compress and replace the uploaded image before saving."""
         if self.image:
             self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, uploaded_image):
         """Compress uploaded image to under 200 KB and standard size."""
+        # Open uploaded image
         image_temp = Image.open(uploaded_image)
-        image_format = image_temp.format  # e.g., JPEG, PNG
 
-        # Convert all images to RGB (for JPEG)
+        # Convert to RGB (JPEG-safe)
         if image_temp.mode in ("RGBA", "P"):
             image_temp = image_temp.convert("RGB")
 
-        # Resize to standard size (maintain aspect ratio)
+        # Resize proportionally
         image_temp.thumbnail((self.STANDARD_WIDTH, self.STANDARD_HEIGHT))
 
-        # Compress until under 200 KB
-        buffer = io.BytesIO()
-        quality = 85  # start quality
+        # Compress
+        buffer = BytesIO()
+        quality = 85
         image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
-        
+
+        # Keep compressing until under 200 KB
         while buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024 and quality > 30:
-            buffer = io.BytesIO()
+            buffer = BytesIO()
             quality -= 5
             image_temp.save(buffer, format='JPEG', quality=quality, optimize=True)
 
         if buffer.tell() > self.MAX_IMAGE_SIZE_KB * 1024:
             raise ValidationError("Image cannot be compressed below 200 KB. Please upload a smaller image.")
 
-        # Create new Django file
-        compressed_image = ContentFile(buffer.getvalue())
-        new_filename = f"{uuid.uuid4()}.jpg"
+        # ✅ Use InMemoryUploadedFile (required for Vercel/Cloudinary)
+        new_filename = f"{self.uid}.jpg"  # keep your instance.uid-based naming
+        buffer.seek(0)
 
-        return ContentFile(buffer.getvalue(), name=new_filename)
+        compressed_image = InMemoryUploadedFile(
+            file=buffer,
+            field_name='ImageField',
+            name=new_filename,
+            content_type='image/jpeg',
+            size=sys.getsizeof(buffer),
+            charset=None,
+        )
+        return compressed_image
 
     class Meta:
         verbose_name = 'User Profile'
