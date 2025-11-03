@@ -15,9 +15,11 @@ SECRET_KEY = 'django-insecure-m!a^8g0r!@kqpdek)@1&8#8g_-2^$)e0ms2zjtam$&x_)*nl40
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '*',
     '127.0.0.1',
     'localhost',
     '.vercel.app',
+    '.railway.app',
     os.getenv('VERCEL_URL', '').replace('https://', '').replace('http://', '')
 ]
 
@@ -130,9 +132,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
-    'https://6bcff533543f.ngrok-free.app',
-    'https://vivah-delta.vercel.app',
-    'https://vivah-oqd3.vercel.app',
+    "https://*.railway.app",
+    "https://*.vercel.app",
+    'https://016ed42981f3.ngrok-free.app',
     'https://res.cloudinary.com',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
