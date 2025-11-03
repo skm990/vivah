@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'demo_test.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL')),
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 # Password validation
