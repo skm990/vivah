@@ -252,6 +252,9 @@ def profiles_list(request):
 @login_required
 def send_interest(request, profile_id):
     receiver_profile = get_object_or_404(UserProfile, id=profile_id)
+    check_profile = UserProfile.objects.filter(user=request.user).first()
+    if not check_profile or not check_profile.gender:
+        return redirect('create_profile')
     ProfileInterest.objects.create(sender=request.user, receiver=receiver_profile)
     sender_profile = get_object_or_404(UserProfile, user=request.user)
     # Run email sending in background thread
