@@ -10,13 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-m!a^8g0r!@kqpdek)@1&8#8g_-2^$)e0ms2zjtam$&x_)*nl40'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -26,7 +21,6 @@ ALLOWED_HOSTS = [
     os.getenv('VERCEL_URL', '').replace('https://', '').replace('http://', '')
 ]
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,24 +72,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'demo_test.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(default=config('DATABASE_URL')),
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
 
+DATABASES = {
+    'default': dj_database_url.config(default=config('DATABASE_URL')),
+}
 
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -113,21 +101,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 SITE_ID = 1
-
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
 
@@ -148,15 +129,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-
 CSRF_TRUSTED_ORIGINS = [
     'https://6bcff533543f.ngrok-free.app',
     'https://vivah-delta.vercel.app',
     'https://vivah-oqd3.vercel.app',
     'https://res.cloudinary.com',
 ]
-
 CORS_ALLOW_ALL_ORIGINS = True
+
 
 #  Cloudinary configuration
 CLOUDINARY_STORAGE = {
@@ -164,23 +144,18 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
-
 cloudinary.config(
     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
     api_key=os.getenv('CLOUDINARY_API_KEY'),
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 # Ensure Cloudinary becomes the active default storage
-# from django.core.files.storage import storages
-
-# storages.backends['default'] = {
-#     'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-# }
+from django.core.files.storage import storages
+storages.backends['default'] = {
+    'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+}
 
 
 
