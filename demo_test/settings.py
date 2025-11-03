@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'demo_test.wsgi.application'
 #     }
 # }
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 DATABASES = {
-        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+        # 'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+
 }
 
 # Password validation
