@@ -1,11 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024">
-    <title>Vivah</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{% block content %}
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
@@ -201,10 +196,6 @@
             .gallery-preview { gap: 10px; }
         }
     </style>
-</head>
-<body>
-
-    {% include 'navbar/navbar.html' %}
 
     <div class="container">
         <div class="corner-decor"></div>
@@ -264,7 +255,7 @@
             <div class="form-group"><label>Weight (kg)</label>{{ form.weight }}</div>
             <div class="form-group">
                 <label>Date Of Birth</label>
-                <input type="date" name="dob" value="{{ form.dob.value }}" class="form-control">
+                <input type="date" name="dob" value="{{ form.instance.dob|date:'Y-m-d' }}" class="form-control">
             </div>
 
             <!-- Personal Info -->
@@ -360,5 +351,4 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}

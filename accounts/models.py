@@ -554,6 +554,10 @@ class PremiumUser(models.Model):
     created = models.DateTimeField(default=now)
     updated = models.DateTimeField(auto_now=True)
 
+    MAX_IMAGE_SIZE_KB = 200
+    STANDARD_WIDTH = 800  # you can adjust this
+    STANDARD_HEIGHT = 800
+
     def __str__(self):
         return f"{self.user.username} - {'Premium' if self.is_premium else 'Standard'}"
 
