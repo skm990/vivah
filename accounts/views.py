@@ -351,7 +351,7 @@ def feedback_view(request):
             return redirect('profiles_list')
     else:
         form = FeedbackForm()
-    return render(request, 'feedback.html', {'form': form})
+    return render(request, 'feedback/feedback.html', {'form': form})
 
 
 @login_required

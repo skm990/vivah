@@ -9,7 +9,7 @@ def send_interest_email(receiver_profile, sender_user, sender_profile):
     to = [receiver_profile.user.email]
 
     html_content = render_to_string(
-        'interest_email_template.html',
+        'interest/interest_email_template.html',
         {
             'receiver_name': receiver_profile.user.first_name,
             'sender_name': sender_user.first_name,
@@ -40,7 +40,7 @@ def send_interest_accept_email(receiver_profile, email, sender_first_name):
     to = [email]
 
     html_content = render_to_string(
-        'interest_accept_email_template.html',  # you can use a new template for acceptance
+        'interest/interest_accept_email_template.html',  # you can use a new template for acceptance
         {
             'receiver_name': receiver_profile.user.first_name,
             'sender_name': sender_first_name,

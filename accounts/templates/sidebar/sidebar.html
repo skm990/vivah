@@ -1,0 +1,551 @@
+{% load static %}
+
+<style>
+  /* ====== SIDEBAR BASE ====== */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 240px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 250, 252, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 0 20px rgba(214, 51, 108, 0.12), 0 0 40px rgba(214, 51, 108, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: visible;
+    border-right: 1px solid rgba(214, 51, 108, 0.1);
+  }
+
+  .sidebar.collapsed {
+    width: 80px;
+  }
+
+  /* ====== HEADER (LOGO + TITLE + TOGGLE) ====== */
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 12px 16px 12px;
+    border-bottom: 2px solid rgba(214, 51, 108, 0.15);
+    position: relative;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+  }
+
+  .logo-img {
+    width: 50px;
+    height:50px;
+    border-radius: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(214, 51, 108, 0.2));
+    flex-shrink: 0;
+    border-width: 1px;
+  }
+
+  .logo-img:hover {
+    transform: scale(1.05) rotate(2deg);
+  }
+
+  .vivah-text {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(135deg, #d6336c 0%, #ff5c8d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: 1.3rem;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(214, 51, 108, 0.1);
+  }
+
+  .toggle-btn {
+    background: linear-gradient(135deg, #fff 0%, #fff4f4 100%);
+    border: 2px solid #d6336c;
+    color: #d6336c;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: auto;
+    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 16px;
+  }
+
+  .toggle-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: linear-gradient(135deg, #d6336c 0%, #ff5c8d 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(214, 51, 108, 0.4);
+  }
+
+  .toggle-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Hide text when collapsed */
+  .sidebar.collapsed .vivah-text {
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
+  }
+
+  /* ====== MENU ITEMS ====== */
+  .menu {
+    margin-top: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .menu a, .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    color: #d6336c;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-radius: 12px;
+    overflow: visible;
+  }
+
+  .menu a::before, .nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(180deg, #d6336c 0%, #ff5c8d 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .menu a:hover::before,
+  .nav-item:hover::before {
+    transform: scaleY(1);
+  }
+
+  .menu a:hover,
+  .nav-item:hover {
+    background: linear-gradient(90deg, rgba(255, 92, 141, 0.15) 0%, rgba(255, 244, 244, 0.8) 100%);
+    padding-left: 20px;
+    color: #ff5c8d;
+    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.1);
+    transform: translateX(2px);
+  }
+
+  .menu a:active,
+  .nav-item:active {
+    transform: scale(0.98);
+  }
+
+  /* Icon styling */
+  .menu a > span:first-child,
+  .nav-item > span:first-child {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .menu a:hover > span:first-child,
+  .nav-item:hover > span:first-child {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .menu-label {
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .sidebar.collapsed .menu-label {
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
+  }
+
+  /* ====== NOTIFICATION ITEM ====== */
+  .nav-item {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .notification-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .nav-item:hover .notification-icon {
+    animation: ring 0.5s ease;
+  }
+
+  @keyframes ring {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(15deg) scale(1.2); }
+    50% { transform: rotate(0deg) scale(1.2); }
+    75% { transform: rotate(-15deg) scale(1.2); }
+  }
+
+  /* ====== BADGE ====== */
+  .badge {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #ffbf00 0%, #ffcc33 100%);
+    color: #000;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(255, 191, 0, 0.4);
+    animation: pulse 2s infinite;
+    border: 2px solid #fff;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: translateY(-50%) scale(1);
+      box-shadow: 0 2px 6px rgba(255, 191, 0, 0.4);
+    }
+    50% {
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 4px 12px rgba(255, 191, 0, 0.6);
+    }
+  }
+
+  .sidebar.collapsed .badge {
+    right: 50%;
+    transform: translate(50%, -50%);
+  }
+
+  /* ====== NOTIFICATION DROPDOWN ====== */
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    margin-left: 10px;
+    margin-top: -12px;
+    background: linear-gradient(135deg, #ffffff 0%, #fff9fc 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(214, 51, 108, 0.25), 0 2px 8px rgba(214, 51, 108, 0.15);
+    min-width: 260px;
+    max-width: 320px;
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 9999;
+    border: 2px solid rgba(214, 51, 108, 0.15);
+    display: none;
+  }
+
+  .nav-item.show-dropdown .dropdown {
+    display: block;
+    animation: dropdownSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes dropdownSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .dropdown a {
+    display: block;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(214, 51, 108, 0.1);
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dropdown a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 92, 141, 0.12) 0%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown a:hover::before {
+    transform: translateX(0);
+  }
+
+  .dropdown a:hover {
+    background: linear-gradient(90deg, #fff4f4 0%, #ffffff 100%);
+    color: #d6336c;
+    padding-left: 22px;
+    border-left: 4px solid #ff5c8d;
+  }
+
+  .dropdown a:last-child {
+    border-bottom: none;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .dropdown a:first-child {
+    border-radius: 10px 10px 0 0;
+  }
+
+  .dropdown .no-messages {
+    padding: 24px 16px;
+    color: #999;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  /* Custom scrollbar */
+  .dropdown::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .dropdown::-webkit-scrollbar-track {
+    background: rgba(214, 51, 108, 0.05);
+    border-radius: 10px;
+  }
+
+  .dropdown::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #d6336c 0%, #ff5c8d 100%);
+    border-radius: 10px;
+  }
+
+  .dropdown::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff5c8d 0%, #d6336c 100%);
+  }
+
+  @media (max-width: 700px) {
+    .sidebar {
+      width: 200px;
+    }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .toggle-btn {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+    }
+
+    .dropdown {
+      min-width: 220px;
+    }
+    /* === Base Styles (no change to your existing UI) === */
+
+/* Keep everything you already have above */
+
+/* === Responsive Fixes for Mobile === */
+@media screen and (max-width: 768px) {
+  /* Sidebar: slide-in drawer style */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 75%; /* covers 75% of screen */
+    max-width: 300px;
+    background-color: #fff;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 9999;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  /* Overlay behind sidebar */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 9998;
+    display: none;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+
+  /* Header adjustments */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 10px 16px;
+  }
+
+  .menu-toggle {
+    display: block;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Hide sidebar normally on mobile until opened */
+  .sidebar a {
+    display: block;
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  /* Ensure main content doesn’t hide under header */
+  .content {
+    margin-top: 70px;
+  }
+}
+
+/* Desktop: restore original sidebar */
+@media screen and (min-width: 769px) {
+  .sidebar {
+    position: fixed;
+    transform: none !important;
+    width: 240px; /* your original width */
+  }
+  .menu-toggle {
+    display: none;
+  }
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+  }
+</style>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img class="logo-img" src="{% static 'images/a1.jpeg' %}" alt="Vivah Logo">
+    <div class="vivah-text">Vivah</div>
+    <button id="toggleBtn" class="toggle-btn" aria-label="Toggle sidebar">☰</button>
+  </div>
+
+  <nav class="menu" aria-label="Main menu">
+    <a href="{% url 'profiles_list' %}"><span>🏠</span> <span class="menu-label">Home</span></a>
+    <a href="{% url 'create_profile' %}"><span>👤</span> <span class="menu-label">Profile</span></a>
+    <a href="{% url 'interest_list' %}"><span>💌</span> <span class="menu-label">Interests</span></a>
+    <a href="{% url 'chat_home' %}"><span>💬</span> <span class="menu-label">Chat</span></a>
+    <a href="{% url 'feedback' %}"><span>📝</span> <span class="menu-label">Feedback</span></a>
+    <a href="{% url 'premium_form_view' %}"><span>💎</span> <span class="menu-label">Pro</span></a>
+
+    <div class="nav-item" id="notificationMenu">
+      <span class="notification-icon">🔔</span>
+      <span class="menu-label">Notifications</span>
+      {% if unseen_messages %}
+        <span class="badge">{{ unseen_messages|length }}</span>
+      {% endif %}
+
+      <div class="dropdown" id="notificationDropdown">
+        {% if unseen_messages %}
+          {% for msg in unseen_messages %}
+            <a href="{% url 'chat_view' msg.sender__username %}">
+              💌 {{ msg.sender__username }} ({{ msg.total }})
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="no-messages">No new messages</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="{% url 'logout' %}"><span>🚪</span> <span class="menu-label">Logout</span></a>
+  </nav>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const notifItem = document.getElementById('notificationMenu');
+
+    // Sidebar toggle
+    toggleBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('collapsed');
+    });
+
+    // Notification dropdown toggle
+    notifItem.addEventListener('click', function (e) {
+      e.stopPropagation();
+      notifItem.classList.toggle('show-dropdown');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!notifItem.contains(e.target)) {
+        notifItem.classList.remove('show-dropdown');
+      }
+    });
+
+    // Prevent dropdown from closing when clicking inside it
+    const dropdown = document.getElementById('notificationDropdown');
+    dropdown.addEventListener('click', function(e) {
+      // Allow links to work normally - don't stop propagation
+      // The page will navigate when link is clicked
+    });
+  });
+
+  const menuToggle = document.querySelector('.menu-toggle');
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.createElement('div');
+  overlay.classList.add('sidebar-overlay');
+  document.body.appendChild(overlay);
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('show');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('show');
+  });
+</script>

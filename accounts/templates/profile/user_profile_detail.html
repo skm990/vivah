@@ -1,12 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024">
-    <title>Vivah</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{% block content %}
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
@@ -15,6 +9,30 @@
             min-height: 100vh;
             padding-top: 80px;
         }
+
+        /* ✅ Page Header (Same as feedback.html style) */
+        .page-header {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding: 20px 10px;
+        }
+
+        .page-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #d6336c;
+            letter-spacing: 1px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #ff4d94;
+            font-weight: 500;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
         /* Container */
         .container {
             max-width: 800px;
@@ -111,27 +129,16 @@
 
         /* Responsive */
         @media(max-width: 768px) {
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            .navbar {
-                gap: 10px;
-                padding: 10px 5px;
-            }
-            .navbar a {
-                font-size: 0.9rem;
-                padding: 6px 10px;
-            }
-            .container {
-                padding: 20px;
-                margin: 20px 10px;
-            }
+            .info-grid { grid-template-columns: 1fr; }
+            .container { padding: 20px; margin: 20px 10px; }
         }
     </style>
-</head>
-<body>
 
-    {% include 'navbar/navbar.html' %}
+    <!-- ✅ Elegant centered page header -->
+    <div class="page-header">
+        <h1>💖 Welcome to Vivah Website</h1>
+        <p>Profile Details</p>
+    </div>
 
     <div class="container">
         <h2>{{ profile.user.first_name }} {{ profile.user.last_name }}</h2>
@@ -206,5 +213,4 @@
             {% endfor %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
