@@ -171,9 +171,6 @@
           <div class="chat-info">
             <h4>
               {{ c.user.first_name }}
-              {% if c.unseen_count %}
-                <span class="badge">{{ c.unseen_count }}</span>
-              {% endif %}
             </h4>
             <p>{{ c.last_message|default:"No messages yet" }}</p>
           </div>
