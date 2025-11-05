@@ -1,224 +1,219 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-<style>
-  body {
-    background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
-    min-height: 100vh;
-    padding-top: 70px; /* space for navbar */
-  }
-
-  h1 {
-    text-align: center;
-    color: #d6336c;
-    font-family: 'Cinzel', serif;
-    margin: 25px 0;
-    font-size: 2rem;
-  }
-
-  .container {
-    max-width: 600px;
-    margin: 50px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  }
-
-  .qr-box {
-    text-align: center;
-    margin-bottom: 25px;
-  }
-
-  .qr-box img {
-    width: 180px;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  }
-
-  .qr-box p {
-    margin-top: 10px;
-    color: #555;
-    font-size: 0.95rem;
-  }
-
-  label {
-    display: block;
-    margin-top: 15px;
-    color: #d6336c;
-    font-weight: 600;
-  }
-
-  input[type="number"],
-  input[type="text"],
-  input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-top: 8px;
-    font-size: 0.95rem;
-  }
-
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin-top: 25px;
-    border: none;
-    background: linear-gradient(90deg, #d6336c, #ff8fab);
-    color: #fff;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .btn:hover {
-    background: linear-gradient(90deg, #c1275a, #ff729d);
-  }
-
-  /* Popup */
-  .popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(2px);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .popup-box {
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    animation: fadeIn 0.4s ease;
-  }
-
-  .popup-box h3 {
-    color: #d6336c;
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-  }
-
-  .popup-box button {
-    margin-top: 15px;
-    background: #d6336c;
-    color: #fff;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .popup-box button:hover {
-    background: #ff8fab;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      margin: 20px;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 1.5rem;
-    }
-    .qr-box img {
-      width: 150px;
-    }
-  }
-</style>
-
-<h1>💎 Become a Premium Member</h1>
-
-<div class="container">
-  <div class="qr-box">
-    <img src="{% static 'images/qr.png' %}" alt="QR Code">
-    <p>Pay ₹100 by scanning the QR code. Your payment will be verified within 24 hours, and your account will get Premium access for 1 month.</p>
-  </div>
-
-  <form id="premiumForm" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="id_amount">Amount:</label>
-    {{ form.amount }}
-
-    <label for="id_mobile">Mobile Number:</label>
-    {{ form.mobile }}
-
-    <label for="id_transaction_id">Transaction ID:</label>
-    {{ form.transaction_id }}
-
-    <label for="id_receipt">Upload Payment Receipt:</label>
-    {{ form.receipt }}
-
-    <button type="submit" class="btn">Submit Details</button>
-  </form>
-</div>
-
-<!-- Success Popup -->
-<div class="popup-overlay" id="popup">
-  <div class="popup-box">
-    <h3>🎉 Thank You!</h3>
-    <p>💎 Congratulations! Your payment details have been received successfully. You’re now one step closer to enjoying exclusive Vivah Premium benefits.</p>
-    <button onclick="closePopup()">Close</button>
-  </div>
-</div>
-
-<script>
-  const form = document.getElementById('premiumForm');
-  const popup = document.getElementById('popup');
-
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-
-    try {
-      const response = await fetch("", {
-        method: "POST",
-        body: formData,
-        headers: { "X-Requested-With": "XMLHttpRequest" }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          popup.style.display = "flex";
-          form.reset();
-          setTimeout(() => {
-            window.location.href = "{% url 'profiles_list' %}";
-          }, 5000);
-        } else if (data.errors) {
-          Object.entries(data.errors).forEach(([field, messages]) => {
-            alert(`${field}: ${messages.join(', ')}`);
-          });
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
         }
-      } else {
-        alert("❌ Something went wrong. Please try again!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("⚠️ An error occurred. Try again later.");
-    }
-  });
 
-  function closePopup() {
-    popup.style.display = "none";
-    window.location.href = "{% url 'profiles_list' %}";
-  }
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff3e0 100%);
+            min-height: 100vh;
+            position: relative;
+            padding-top: 70px; /* space for navbar */
+        }
+
+        h1 {
+            text-align: center;
+            color: #d6336c;
+            font-family: 'Cinzel', serif;
+            margin: 25px 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .qr-box {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .qr-box img {
+            width: 180px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .qr-box p {
+            margin-top: 10px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #d6336c;
+            font-weight: 600;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            border: none;
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #c1275a, #ff729d);
+        }
+
+        /* Popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(2px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-box {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .popup-box h3 {
+            color: #d6336c;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .popup-box button {
+            margin-top: 15px;
+            background: #d6336c;
+            color: #fff;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup-box button:hover {
+            background: #ff8fab;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+    <h1>💎 Become a Premium Member</h1>
+
+    <div class="container">
+        <div class="qr-box">
+            <img src="{% static 'images/qr.png' %}" alt="QR Code">
+            <p>Pay ₹100 by scanning the QR code. Your payment will be verified within 24 hours, and your account will get Premium access for 1 month.</p>
+        </div>
+
+        <form id="premiumForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_amount">Amount:</label>
+            {{ form.amount }}
+
+            <label for="id_mobile">Mobile Number:</label>
+            {{ form.mobile }}
+
+            <label for="id_transaction_id">Transaction ID:</label>
+            {{ form.transaction_id }}
+
+            <label for="id_receipt">Upload Payment Receipt:</label>
+            {{ form.receipt }}
+
+            <button type="submit" class="btn">Submit Details</button>
+        </form>
+    </div>
+
+    <!-- Success Popup -->
+<div class="popup-overlay" id="popup">
+    <div class="popup-box">
+        <h3>🎉 Thank You!</h3>
+        <p>💎 Congratulations! Your payment details have been received successfully. You’re now one step closer to enjoying exclusive Vivah Premium benefits.</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+<script>
+    const form = document.getElementById('premiumForm');
+    const popup = document.getElementById('popup');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch("", {
+                method: "POST",
+                body: formData,
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    // Show popup
+                    popup.style.display = "flex";
+                    form.reset();
+
+                    // ⏳ Start 5-second redirect timer only when popup is shown
+                    setTimeout(() => {
+                        window.location.href = "{% url 'profiles_list' %}";
+                    }, 5000);
+                } else if (data.errors) {
+                    Object.entries(data.errors).forEach(([field, messages]) => {
+                        alert(`${field}: ${messages.join(', ')}`);
+                    });
+                }
+            } else {
+                alert("❌ Something went wrong. Please try again!");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("⚠️ An error occurred. Try again later.");
+        }
+    });
+
+    function closePopup() {
+        popup.style.display = "none";
+        window.location.href = "{% url 'profiles_list' %}";
+    }
 </script>
 {% endblock %}
