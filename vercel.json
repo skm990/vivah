@@ -15,8 +15,15 @@
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "demo_test/wsgi.py"
     }
-  ]
+  ],
+  "static": {
+    "include": ["staticfiles"]
+  }
 }
