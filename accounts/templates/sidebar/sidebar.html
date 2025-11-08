@@ -16,8 +16,20 @@
     padding-top: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    overflow: visible;
     border-right: 1px solid rgba(214, 51, 108, 0.1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(214, 51, 108, 0.3) transparent;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(214, 51, 108, 0.3);
+    border-radius: 10px;
   }
 
   /* ===================== HEADER ===================== */
@@ -53,8 +65,8 @@
     letter-spacing: 1px;
   }
 
-  /* ===== COLLAPSED SIDEBAR FIX ===== */
-    .sidebar.collapsed {
+  /* ===== COLLAPSED SIDEBAR ===== */
+  .sidebar.collapsed {
     width: 80px;
   }
 
@@ -75,7 +87,6 @@
     display: none;
   }
 
-  /* Center all icons when collapsed */
   .sidebar.collapsed .menu a span:first-child {
     font-size: 20px;
     margin: 0;
@@ -83,7 +94,6 @@
     width: 100%;
   }
 
-  /* Fix header when collapsed */
   .sidebar.collapsed .sidebar-header {
     justify-content: center;
   }
@@ -140,6 +150,7 @@
     border-radius: 12px;
     position: relative;
     transition: all 0.3s ease;
+    cursor: pointer;
   }
 
   .menu a:hover {
@@ -163,12 +174,79 @@
     box-shadow: 0 2px 6px rgba(255, 191, 0, 0.4);
   }
 
-  /* ===================== DROPDOWN ===================== */
-  .dropdown {
+  /* ===================== TOP NAVBAR ===================== */
+  .top-navbar {
+    position: fixed;
+    top: 0;
+    left: 240px; /* sidebar width */
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, #fff 0%, #fff8fa 100%);
+    box-shadow: 0 2px 10px rgba(214, 51, 108, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    z-index: 900;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.collapsed ~ .top-navbar {
+    left: 80px;
+  }
+
+  .top-navbar .nav-item {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.6rem;
+    color: #d6336c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .top-navbar .nav-item:hover {
+    transform: scale(1.1);
+  }
+
+  /* Center heading */
+  .top-navbar .nav-center {
     position: absolute;
-    top: 100%;
-    left: 100%;
-    margin-left: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .top-navbar .nav-center h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #d6336c;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  /* Ensure each notification link appears in its own row */
+  .dropdown a {
+    display: block;
+    padding: 10px 14px;
+    margin: 4px 0;
+    text-decoration: none;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .dropdown a:hover {
+    background: rgba(214, 51, 108, 0.08);
+    transform: translateX(4px);
+  }
+
+  .top-navbar .dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
     background: linear-gradient(135deg, #ffffff 0%, #fff9fc 100%);
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(214, 51, 108, 0.25);
@@ -180,22 +258,8 @@
     display: none;
   }
 
-  .nav-item.show-dropdown .dropdown {
+  .top-navbar .nav-item.show-dropdown .dropdown {
     display: block;
-  }
-
-  .dropdown a {
-    display: block;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(214, 51, 108, 0.1);
-    color: #333;
-    text-decoration: none;
-  }
-
-  .dropdown .no-messages {
-    padding: 16px;
-    text-align: center;
-    color: #888;
   }
 
   /* ===================== MOBILE VIEW ===================== */
@@ -250,6 +314,11 @@
       cursor: pointer;
       z-index: 10000;
     }
+
+    .top-navbar {
+      left: 0;
+      height: 55px;
+    }
   }
 
   @media screen and (min-width: 769px) {
@@ -277,10 +346,15 @@
     <a href="{% url 'chat_home' %}"><span>💬</span> <span class="menu-label">Chat</span></a>
     <a href="{% url 'feedback' %}"><span>📝</span> <span class="menu-label">Feedback</span></a>
     <a href="{% url 'premium_form_view' %}"><span>💎</span> <span class="menu-label">Pro</span></a>
+    <a href="{% url 'logout' %}"><span>🚪</span> <span class="menu-label">Logout</span></a>
+  </nav>
+</div>
 
+<!-- ========== TOP NAVBAR ========== -->
+<div class="top-navbar">
+  <div class="nav-right">
     <div class="nav-item" id="notificationMenu">
       <span class="notification-icon">🔔</span>
-      <span class="menu-label">Notifications</span>
       {% if unseen_messages %}
         <span class="badge">{{ unseen_messages|length }}</span>
       {% endif %}
@@ -296,9 +370,7 @@
         {% endif %}
       </div>
     </div>
-
-    <a href="{% url 'logout' %}"><span>🚪</span> <span class="menu-label">Logout</span></a>
-  </nav>
+  </div>
 </div>
 
 <!-- ========== SCRIPT ========== -->
@@ -308,13 +380,11 @@
     const toggleBtn = document.getElementById("toggleBtn");
     const notifItem = document.getElementById("notificationMenu");
 
-    // Desktop collapse toggle
     toggleBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       sidebar.classList.toggle("collapsed");
     });
 
-    // Notification dropdown toggle
     notifItem.addEventListener("click", (e) => {
       e.stopPropagation();
       notifItem.classList.toggle("show-dropdown");
@@ -326,7 +396,6 @@
       }
     });
 
-    // ===== Mobile sidebar toggle =====
     const mobileBtn = document.getElementById("mobileMenuBtn");
     const overlay = document.createElement("div");
     overlay.classList.add("sidebar-overlay");
@@ -335,13 +404,13 @@
     mobileBtn.addEventListener("click", () => {
       sidebar.classList.add("active");
       overlay.classList.add("show");
-      mobileBtn.style.display = "none"; // hide button when sidebar opens
+      mobileBtn.style.display = "none";
     });
 
     overlay.addEventListener("click", () => {
       sidebar.classList.remove("active");
       overlay.classList.remove("show");
-      mobileBtn.style.display = "flex"; // show button again when sidebar closes
+      mobileBtn.style.display = "flex";
     });
   });
 </script>

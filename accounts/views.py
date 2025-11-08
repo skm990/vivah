@@ -251,6 +251,9 @@ def profiles_list(request):
 
 @login_required
 def send_interest(request, profile_id):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     receiver_profile = get_object_or_404(UserProfile, id=profile_id)
     check_profile = UserProfile.objects.filter(user=request.user).first()
     if not check_profile or not check_profile.gender:
@@ -273,6 +276,9 @@ def send_interest(request, profile_id):
 
 @login_required
 def interest_list(request):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     # Get current user's profile
     try:
         my_profile = request.user.profile
@@ -293,6 +299,9 @@ def interest_list(request):
 
 @login_required
 def accept_interest(request, interest_id):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'accepted'
     interest.save()
@@ -308,6 +317,9 @@ def accept_interest(request, interest_id):
 
 @login_required
 def reject_interest(request, interest_id):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'rejected'
     interest.save()
@@ -371,6 +383,9 @@ def user_profile_detail(request, uid):
 
 @login_required
 def chat_view(request, receiver_email):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     # Find receiver by email
     receiver = get_object_or_404(User, username=receiver_email)
     profile = get_object_or_404(UserProfile, user=receiver)
@@ -411,6 +426,9 @@ def navbar_notifications(request):
 
 @login_required
 def chat_home(request):
+    if request.user.is_verified == False:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     # Collect all chat partners of current user
     chat_partners = ChatMessage.objects.filter(
         Q(sender=request.user) | Q(receiver=request.user)

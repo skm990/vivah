@@ -57,6 +57,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=60, unique=True)
     first_name = models.CharField(_('first name'), max_length=40)
     last_name = models.CharField(_('last name'), max_length=40, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
     created_at = models.DateTimeField(auto_now_add=True)

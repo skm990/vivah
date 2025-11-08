@@ -20,17 +20,17 @@ from accounts.models import (
 # =====================
 class UserAccountAdmin(UserAdmin):
     model = UserAccount
-    list_display = ('email', 'username', 'is_staff', 'is_active', 'created_at')
-    list_filter = ('is_staff', 'is_active', 'created_at')
+    list_display = ('email', 'username', 'is_staff', 'is_active', 'is_verified', 'created_at')
+    list_filter = ('is_staff', 'is_active', 'is_verified', 'created_at')
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
         ('Personal Info', {'fields': ('first_name', 'last_name')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_verified', 'is_superuser', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2', 'is_staff', 'is_active'),
+            'fields': ('email', 'username', 'password1', 'password2', 'is_staff', 'is_active', 'is_verified'),
         }),
     )
     search_fields = ('email', 'username')
