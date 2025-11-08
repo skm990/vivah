@@ -231,6 +231,7 @@
                 <div>
                     <h3>{{ interest.sender.first_name }} {{ interest.sender.last_name }}</h3>
                     <p><strong>Age:</strong> {{ interest.sender.profile.age }}</p>
+                    <p><strong>Gender:</strong> {{ interest.sender.profile.gender }}</p>
                     <p><strong>Religion:</strong> {{ interest.sender.profile.religion }}</p>
                     <p><strong>City:</strong> {{ interest.sender.profile.city }}</p>
                     <p><strong>Status:</strong> 
@@ -276,6 +277,7 @@
             <div class="card-content">
                 <h3>{{ interest.receiver.user.first_name }} {{ interest.receiver.user.last_name }}</h3>
                 <p><strong>Age:</strong> {{ interest.receiver.age }}</p>
+                <p><strong>Gender:</strong> {{ interest.receiver.gender }}</p>
                 <p><strong>Religion:</strong> {{ interest.receiver.religion }}</p>
                 <p><strong>City:</strong> {{ interest.receiver.city }}</p>
                 <p><strong>Status:</strong> 

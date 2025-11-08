@@ -208,8 +208,8 @@
         <div class="corner-decor"></div>
         <div class="chat-header">
             <a href="{% url 'chat_home' %}" class="back-btn">⬅️</a>
-            💬 Chat with {{ receiver.first_name }}
-            <a href="{% url 'user_profile_detail' profile.uid %}" class="view-profile-btn">👁️ View Profile</a>
+            💬 {{ receiver.first_name }}
+            <a href="{% url 'user_profile_detail' profile.uid %}" class="view-profile-btn">👁️ View</a>
         </div>
 
         <div class="chat-body">
