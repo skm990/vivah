@@ -251,8 +251,12 @@ def profiles_list(request):
 
 @login_required
 def send_interest(request, profile_id):
-    if request.user.is_verified == False:
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
     receiver_profile = get_object_or_404(UserProfile, id=profile_id)
     check_profile = UserProfile.objects.filter(user=request.user).first()
@@ -276,15 +280,14 @@ def send_interest(request, profile_id):
 
 @login_required
 def interest_list(request):
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
     if request.user.is_verified == False:
-        messages.warning(request, "You must complete your profile first.")
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
-    # Get current user's profile
-    try:
-        my_profile = request.user.profile
-    except UserProfile.DoesNotExist:
-        messages.warning(request, "You must complete your profile first.")
-        return redirect('create_profile')
+    my_profile = request.user.profile
     # Incoming: users who sent interest to me
     incoming_interests = ProfileInterest.objects.filter(receiver=my_profile)
     # Outgoing: interests I sent to others
@@ -299,8 +302,12 @@ def interest_list(request):
 
 @login_required
 def accept_interest(request, interest_id):
-    if request.user.is_verified == False:
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'accepted'
@@ -317,8 +324,12 @@ def accept_interest(request, interest_id):
 
 @login_required
 def reject_interest(request, interest_id):
-    if request.user.is_verified == False:
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'rejected'
@@ -366,6 +377,9 @@ def feedback_view(request):
     return render(request, 'feedback/feedback.html', {'form': form})
 
 
+def help_view(request):
+    return render(request, 'feedback/help_and_support.html')
+
 @login_required
 def user_profile_detail(request, uid):
     # DO NOT override uid here
@@ -383,8 +397,13 @@ def user_profile_detail(request, uid):
 
 @login_required
 def chat_view(request, receiver_email):
-    if request.user.is_verified == False:
+    from django.contrib import messages
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
     # Find receiver by email
     receiver = get_object_or_404(User, username=receiver_email)
@@ -402,6 +421,7 @@ def chat_view(request, receiver_email):
     if request.method == "POST":
         text = request.POST.get('message')
         if text:
+            print(request.user, receiver, text)
             ChatMessage.objects.create(sender=request.user, receiver=receiver, message=text)
         return redirect('chat_view', receiver_email=receiver.username)
     return render(request, 'chat/chat.html', {
@@ -426,8 +446,12 @@ def navbar_notifications(request):
 
 @login_required
 def chat_home(request):
-    if request.user.is_verified == False:
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
         return redirect('create_profile')
     # Collect all chat partners of current user
     chat_partners = ChatMessage.objects.filter(

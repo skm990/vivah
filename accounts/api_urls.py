@@ -17,6 +17,7 @@ from .views import (
     chat_view,
     chat_home,
     premium_form_view,
+    help_view,
 )
 
 
@@ -35,6 +36,7 @@ urlpatterns = [
     path('', home_view, name='home'),  # Home page
     path('delete-gallery-image/<uuid:uid>/', delete_gallery_image, name='delete_gallery_image'),
     path('feedback/', feedback_view, name='feedback'),
+    path('help/', help_view, name='help'),
     path('profiles/<uuid:uid>/user/', user_profile_detail, name='user_profile_detail'),
     path('chat/email/<str:receiver_email>/', chat_view, name='chat_view'),
     path('chat/', chat_home, name='chat_home'),

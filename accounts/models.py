@@ -132,6 +132,7 @@ class UserProfile(models.Model):
     ]
 
     ANNUAL_INCOME_CHOICES = [
+        ('No Income', 'No Income'),
         ('Below 2 Lakh', 'Below 2 Lakh'),
         ('2-5 Lakh', '2-5 Lakh'),
         ('5-10 Lakh', '5-10 Lakh'),

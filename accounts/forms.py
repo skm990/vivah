@@ -22,12 +22,9 @@ class UserProfileForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Fields that should NOT be required
-        not_required_fields = ['uid', 'user', 'user_identity']
         # Mark all other fields as required
         for field_name, field in self.fields.items():
-            if field_name not in not_required_fields:
-                field.required = True
+            field.required = True
 
 
 class FeedbackForm(forms.ModelForm):

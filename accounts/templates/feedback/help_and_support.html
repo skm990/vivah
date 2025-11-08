@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffe6ef 0%, #fff5e1 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+      transition: background 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      margin: 20px 15px;
+      font-size: 2rem;
+      text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto 60px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .container:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
+    }
+
+    .contact-info {
+      margin-top: 10px;
+      font-size: 1.05rem;
+      color: #333;
+    }
+
+    .contact-info span {
+      color: #d6336c;
+      font-weight: 600;
+    }
+
+    .message-box {
+      width: 100%;
+      margin-top: 25px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      color: #d6336c;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(214, 51, 108, 0.3);
+      font-size: 0.95rem;
+      background: #fffafc;
+      resize: vertical;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      min-height: 120px;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #ff5c8d;
+      box-shadow: 0 0 6px rgba(214, 51, 108, 0.25);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 26px;
+      background: linear-gradient(90deg, #d6336c, #ff8fab);
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.25);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #c1275a, #ff6a9b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(214, 51, 108, 0.3);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .support-links {
+      margin-top: 30px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .support-links a {
+      color: #d6336c;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 6px;
+    }
+
+    .support-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding-top: 80px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      .container {
+        padding: 25px 20px;
+      }
+      .btn {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+
+  <h1>🆘 Help & Support</h1>
+
+  <div class="container">
+    <p class="contact-info">
+      📞 Contact Number: <span>+91 8579817969</span><br>
+      ✉️ Email: <span>myvivahjourney@gmail.com</span>
+    </p>
+
+    <div class="message-box">
+      <label for="supportMessage">Write your message:</label>
+      <textarea id="supportMessage" placeholder="Type your query or concern here..."></textarea>
+    </div>
+
+    <a
+      id="sendMailBtn"
+      href="#"
+      class="btn"
+    >
+      📤 Send Mail
+    </a>
+
+    <a
+      id="whatsappBtn"
+      href="https://wa.me/918579817969"
+      target="_blank"
+      class="btn"
+      style="margin-left:10px;"
+    >
+      💬 WhatsApp Support
+    </a>
+
+    <div class="support-links">
+      <p>Need quick help?</p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const sendMailBtn = document.getElementById("sendMailBtn");
+    const messageBox = document.getElementById("supportMessage");
+
+    sendMailBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const msg = encodeURIComponent(messageBox.value.trim());
+      window.location.href = `mailto:myvivahjourney@gmail.com?subject=Help%20&%20Support%20Request&body=${msg}`;
+    });
+    // WhatsApp button
+    whatsappBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const msg = encodeURIComponent(messageBox.value.trim() || "Hello, I need help regarding My Vivah Journey.");
+      // Opens WhatsApp chat with your number +91 8579817969
+      window.open(`https://wa.me/918579817969?text=${msg}`, "_blank");
+    });
+  </script>
+{% endblock %}
