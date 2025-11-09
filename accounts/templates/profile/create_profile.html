@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
@@ -195,6 +196,16 @@
             button { font-size: 14px; padding: 10px; }
             .gallery-preview { gap: 10px; }
         }
+        .select2-selection__rendered {
+            background: #fff !important;
+            color: #000 !important;
+        }
+        .select2-selection--single {
+            height: auto !important;
+        }
+        .select2-selection__clear {
+            display: none !important;
+        }
     </style>
 
     <div class="container">
@@ -317,11 +328,12 @@
     You can upload any government ID (supported formats: .jpg, .jpeg, .png, .webp, .gif, .bmp, .tiff).
                 </small>
             </div>
-
             <button type="submit">Save Profile</button>
         </form>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <!-- JS for live preview -->
     <script>
         // Profile image preview
@@ -378,6 +390,13 @@
                     galleryPreview.appendChild(imgDiv);
                 };
                 reader.readAsDataURL(file);
+            });
+        });
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: 'Search caste...',
+                allowClear: true,
+                width: '100%'
             });
         });
     </script>

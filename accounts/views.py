@@ -125,6 +125,7 @@ def create_profile_view(request):
         "first_name": request.user.first_name,
         "last_name": request.user.last_name,
         "gallery_images": gallery_images,
+        "verify_document": 1 if request.user.is_verified else 0
     }
     return render(request, "profile/create_profile.html", context)
 
@@ -196,6 +197,7 @@ def profiles_list(request):
     if city:
         profiles = profiles.filter(city__icontains=city)
     # --- Dropdown values ---
+    profiles = profiles.filter(user__is_verified=True)
     countries = (
         UserProfile.objects.values_list('country', flat=True)
         .distinct()
