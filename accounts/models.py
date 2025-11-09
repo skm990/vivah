@@ -399,10 +399,18 @@ class UserProfile(models.Model):
         ('Washerman', 'Washerman'),
         ('Other', 'Other')
     )
+    
+    POST_BY_CHOICES = [
+        ('self', 'Self'),
+        ('family', 'Family'),
+        ('friend', 'Friend'),
+        ('other', 'Other')
+    ]
 
     # Basic Info
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    post_by = models.CharField(max_length=100, choices=POST_BY_CHOICES, null=True, blank=True)
     image = models.ImageField(upload_to=user_profile_image_upload_path, null=True, blank=True)
     user_identity = models.CharField(db_index=True, unique=True, max_length=10, default=key_generator, editable=False)
     # Personal Info

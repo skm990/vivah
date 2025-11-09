@@ -106,11 +106,15 @@ def create_profile_view(request):
         last_name = request.POST.get("last_name", "").strip()
         if form.is_valid():
             profile = form.save()
-            # Update first_name and last_name
+            # ✅ Update first_name and last_name before saving the profile
             user = request.user
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
+            if not getattr(user, "is_verified", False):  # optional check
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+
+            profile.user = user
+            profile.save()
             # Save uploaded gallery images
             for img in images:
                 UploadImage.objects.create(galary=profile, image=img)
@@ -125,7 +129,6 @@ def create_profile_view(request):
         "first_name": request.user.first_name,
         "last_name": request.user.last_name,
         "gallery_images": gallery_images,
-        "verify_document": 1 if request.user.is_verified else 0
     }
     return render(request, "profile/create_profile.html", context)
 
