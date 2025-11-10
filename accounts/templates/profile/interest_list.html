@@ -229,6 +229,7 @@
             {% endif %}
             <div class="card-content">
                 <div>
+                    <p><strong>Interest Received Date</strong> {{ interest.created_at }}</p>
                     <h3>{{ interest.sender.first_name }} {{ interest.sender.last_name }}</h3>
                     <p><strong>Age:</strong> {{ interest.sender.profile.age }}</p>
                     <p><strong>Gender:</strong> {{ interest.sender.profile.gender }}</p>
@@ -275,6 +276,7 @@
             <img src="/static/images/default-profile.png" alt="Default">
             {% endif %}
             <div class="card-content">
+                <p><strong>Interest Expressed Date</strong> {{ interest.created_at }}</p>
                 <h3>{{ interest.receiver.user.first_name }} {{ interest.receiver.user.last_name }}</h3>
                 <p><strong>Age:</strong> {{ interest.receiver.age }}</p>
                 <p><strong>Gender:</strong> {{ interest.receiver.gender }}</p>

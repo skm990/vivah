@@ -141,6 +141,13 @@ def logout_view(request):
 
 @login_required
 def profiles_list(request):
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if not user_profile or not user_profile.identity_proof:
+        messages.warning(request, "You must complete your profile first.")
+        return redirect('create_profile')
+    if request.user.is_verified == False:
+        messages.warning(request, "Your profile is now under verification. Please wait for admin approval.")
+        return redirect('create_profile')
     min_age = request.GET.get('min_age')
     max_age = request.GET.get('max_age')
     caste = request.GET.get('caste')
@@ -228,12 +235,6 @@ def send_interest(request, profile_id):
         args=(receiver_profile, request.user, sender_profile),
         daemon=True  # ensures thread closes when request ends
     ).start()
-    # Check if interest already exists
-    if ProfileInterest.objects.filter(sender=request.user, receiver=receiver_profile).exists():
-        messages.info(request, "You already expressed interest in this profile.")
-    else:
-        ProfileInterest.objects.create(sender=request.user, receiver=receiver_profile)
-        messages.success(request, f"Interest sent to {receiver_profile.user.get_full_name()} successfully!")
     return redirect(request.META.get('HTTP_REFERER', 'profiles_list'))
 
 
@@ -337,6 +338,13 @@ def feedback_view(request):
 
 def help_view(request):
     return render(request, 'feedback/help_and_support.html')
+
+def terms_view(request):
+    return render(request, 'feedback/terms.html')
+
+def about_view(request):
+    return render(request, 'feedback/about.html')
+
 
 @login_required
 def user_profile_detail(request, uid):

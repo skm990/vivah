@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffe6ef 0%, #fff5e1 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+      transition: background 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      margin: 20px 15px;
+      font-size: 2rem;
+      text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: 20px auto 60px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+      overflow-y: auto;
+      max-height: 70vh;
+    }
+
+    .container:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
+    }
+
+    p, li {
+      margin-top: 12px;
+      color: #444;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* 📱 Mobile */
+    @media (max-width: 600px) {
+      body {
+        padding-top: 80px;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 15px;
+      }
+      .container {
+        padding: 25px 20px;
+      }
+    }
+  </style>
+
+  <h1>📜 Terms & Conditions</h1>
+
+  <div class="container">
+    <p>Welcome to Vivah Website! By using our services, you agree to comply with and be bound by the following terms and conditions:</p>
+
+    <ul>
+      <li>Users must be above 18 years of age to register and use our services.</li>
+      <li>All information provided on profiles must be accurate, complete, and up-to-date.</li>
+      <li>Users are solely responsible for the authenticity of the details they share.</li>
+      <li>Any misuse, harassment, or offensive behavior is strictly prohibited and may lead to account termination.</li>
+      <li>We reserve the right to remove or modify any profile content without prior notice if it violates our policies.</li>
+      <li>Subscription payments, if any, are non-refundable unless stated otherwise.</li>
+      <li>Personal information is protected under our Privacy Policy. Please review it carefully.</li>
+      <li>We are not responsible for any interactions, meetings, or relationships initiated via the platform.</li>
+      <li>By using our services, you agree not to engage in fraudulent or illegal activities.</li>
+      <li>We may update these terms from time to time; continued use of the platform constitutes acceptance of updated terms.</li>
+    </ul>
+
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

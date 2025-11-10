@@ -35,7 +35,7 @@ class UserProfileForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.required = True
         if self.instance and getattr(self.instance.user, 'is_verified', False):
-            for field in ['gender', 'religion',  'identity_proof', 'caste', 'post_by', 'father_name', 'mother_name', 'dob']:
+            for field in ['gender', 'religion',  'identity_proof', 'caste', 'post_by', 'father_name', 'mother_name', 'dob', 'phone_no']:
                 self.fields[field].required = False
                 self.fields[field].disabled = True
 
