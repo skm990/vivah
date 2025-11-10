@@ -7,7 +7,6 @@ from django.utils.crypto import get_random_string
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserOtp, UserAccount, WelcomeMail, UserProfile, ProfileInterest, UploadImage, ChatMessage, PremiumUser
 from .forms import EmailForm, OtpForm, LoginForm, UserProfileForm, FeedbackForm, PremiumUserForm
-from allauth.account.models import EmailAddress
 from django.core.paginator import Paginator
 from .utils import send_otp_email, send_interest_email, send_interest_accept_email
 from datetime import date
@@ -64,12 +63,7 @@ def verify_otp_view(request):
                 user.save()
                 user_otp.otp_verified = True
                 user_otp.save()
-                obj, _ = EmailAddress.objects.get_or_create(email=email, user=user)
-                obj.primary = True
-                obj.verified = True
-                obj.save()
                 login(request, user)
-                # messages.success(request, "OTP verified and password set successfully!")
                 return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid or expired OTP.")
@@ -118,7 +112,6 @@ def create_profile_view(request):
             # Save uploaded gallery images
             for img in images:
                 UploadImage.objects.create(galary=profile, image=img)
-            # messages.success(request, "Profile saved successfully!")
             return redirect('profiles_list')
     else:
         form = UserProfileForm(instance=user_profile)
@@ -137,7 +130,6 @@ def create_profile_view(request):
 def delete_gallery_image(request, uid):
     img = get_object_or_404(UploadImage, uid=uid, galary__user=request.user)
     img.delete()
-    # messages.success(request, "Image deleted successfully!")
     return redirect('create_profile')
 
 
@@ -323,7 +315,6 @@ def accept_interest(request, interest_id):
         target=send_interest_accept_email,
         args=(receiver_profile, interest.sender.email, interest.sender.first_name)
     ).start()
-    # messages.success(request, "Interest accepted successfully!")
     return redirect(request.META.get('HTTP_REFERER', 'interest_list'))
 
 
@@ -339,7 +330,6 @@ def reject_interest(request, interest_id):
     interest = get_object_or_404(ProfileInterest, id=interest_id, receiver__user=request.user)
     interest.status = 'rejected'
     interest.save()
-    # messages.error(request, "Interest rejected.")
     return redirect(request.META.get('HTTP_REFERER', 'interest_list'))
 
 

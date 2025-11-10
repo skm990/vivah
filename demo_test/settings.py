@@ -1,27 +1,13 @@
 from pathlib import Path
 import os
-import dj_database_url
-from decouple import config
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m!a^8g0r!@kqpdek)@1&8#8g_-2^$)e0ms2zjtam$&x_)*nl40'
-DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    '*',
-    '127.0.0.1',
-    'localhost',
-    '.vercel.app',
-    '.railway.app',
-    os.getenv('VERCEL_URL', '').replace('https://', '').replace('http://', '')
-]
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,24 +16,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'django.contrib.sites',       # Required by allauth
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'cloudinary',
-    'cloudinary_storage',
+    # 'rest_framework',
+    'widget_tweaks',
     'accounts',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ✅ Add this line
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # 👈 Add this line
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -73,20 +52,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'demo_test.wsgi.application'
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
 DATABASES = {
-        # 'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -114,14 +84,13 @@ USE_TZ = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SITE_ID = 1
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -132,39 +101,11 @@ EMAIL_HOST_USER='myvivahjourney@gmail.com'
 EMAIL_HOST_PASSWORD='usvwxmgjoleishjn'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.railway.app",
-    "https://*.vercel.app",
-    'https://016ed42981f3.ngrok-free.app',
-    'https://res.cloudinary.com',
+    "https://18abc1617b6d.ngrok-free.app",
 ]
-CORS_ALLOW_ALL_ORIGINS = True
-
-
-#  Cloudinary configuration
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-# Ensure Cloudinary becomes the active default storage
-from django.core.files.storage import storages
-storages.backends['default'] = {
-    'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-}
 
 
 
-# for image storage path testing
-# from django.core.files.storage import default_storage
-# print(default_storage.__class__.__name__)
+
+# python manage.py dumpdata > data.json

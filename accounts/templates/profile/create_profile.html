@@ -223,7 +223,7 @@
 
             <!-- Basic Info -->
             <div class="section-title">Basic Info</div>
-            <div class="form-group"><label>First Name</label>
+            <div class="form-group"><label>First Name *</label>
                 {% if form.instance.user.is_verified %}
                     <input type="text" name="first_name" value="{{ first_name }}" class="form-control" disabled readonly>
                 {% else %}
@@ -237,10 +237,10 @@
                     <input type="text" name="last_name" value="{{ last_name }}">
                 {% endif %}
             </div>
-            <div class="form-group"><label>Post By</label>{{ form.post_by }}</div>
+            <div class="form-group"><label>Post By *</label>{{ form.post_by }}</div>
             <!-- Profile Image -->
             <div class="form-group full-width">
-                <label>Profile Image</label>
+                <label>Profile Image *</label>
                 <div class="image-preview" id="profilePreview">
                     {% if form.instance.image %}
                         <img src="{{ form.instance.image.url }}" alt="Profile Image">
@@ -269,11 +269,11 @@
             </div>
 
             <!-- Gender / Age / Height / Weight -->
-            <div class="form-group"><label>Gender</label>{{ form.gender }}</div>
-            <div class="form-group"><label>Height (cm)</label>{{ form.height }}</div>
-            <div class="form-group"><label>Weight (kg)</label>{{ form.weight }}</div>
+            <div class="form-group"><label>Gender *</label>{{ form.gender }}</div>
+            <div class="form-group"><label>Height (cm) *</label>{{ form.height }}</div>
+            <div class="form-group"><label>Weight (kg) *</label>{{ form.weight }}</div>
             <div class="form-group">
-                <label>Date Of Birth</label>
+                <label>Date Of Birth *</label>
                 {% if form.instance.user.is_verified %}
                     <input type="date" name="dob" value="{{ form.instance.dob|date:'Y-m-d' }}" class="form-control" disabled readonly>
                 {% else %}
@@ -283,51 +283,51 @@
 
             <!-- Personal Info -->
             <div class="section-title">Personal Info</div>
-            <div class="form-group"><label>Marital Status</label>{{ form.marital_status }}</div>
-            <div class="form-group"><label>Religion</label>{{ form.religion }}</div>
-            <div class="form-group"><label>Caste</label>{{ form.caste }}</div>
-            <div class="form-group"><label>Mother Tongue</label>{{ form.mother_tongue }}</div>
+            <div class="form-group"><label>Marital Status *</label>{{ form.marital_status }}</div>
+            <div class="form-group"><label>Religion *</label>{{ form.religion }}</div>
+            <div class="form-group"><label>Caste *</label>{{ form.caste }}</div>
+            <div class="form-group"><label>Mother Tongue *</label>{{ form.mother_tongue }}</div>
 
             <!-- Education & Profession -->
             <div class="section-title">Education & Profession</div>
-            <div class="form-group"><label>Education</label>{{ form.education }}</div>
-            <div class="form-group"><label>Occupation</label>{{ form.occupation }}</div>
-            <div class="form-group"><label>Annual Income</label>{{ form.annual_income }}</div>
-            <div class="form-group"><label>Company Name</label>{{ form.company_name }}</div>
-            <div class="form-group"><label>Working City</label>{{ form.working_city }}</div>
+            <div class="form-group"><label>Education *</label>{{ form.education }}</div>
+            <div class="form-group"><label>Occupation *</label>{{ form.occupation }}</div>
+            <div class="form-group"><label>Annual Income *</label>{{ form.annual_income }}</div>
+            <div class="form-group"><label>Company Name *</label>{{ form.company_name }}</div>
+            <div class="form-group"><label>Working City *</label>{{ form.working_city }}</div>
 
             <!-- Contact & Location -->
             <div class="section-title">Contact & Location</div>
-            <div class="form-group"><label>Phone Number</label>{{ form.phone_no }}</div>
-            <div class="form-group"><label>Country</label>{{ form.country }}</div>
-            <div class="form-group"><label>State</label>{{ form.state }}</div>
-            <div class="form-group"><label>City</label>{{ form.city }}</div>
-            <div class="form-group full-width"><label>Address</label>{{ form.address }}</div>
+            <div class="form-group"><label>Phone Number *</label>{{ form.phone_no }}</div>
+            <div class="form-group"><label>Country *</label>{{ form.country }}</div>
+            <div class="form-group"><label>State *</label>{{ form.state }}</div>
+            <div class="form-group"><label>City *</label>{{ form.city }}</div>
+            <div class="form-group full-width"><label>Address *</label>{{ form.address }}</div>
 
             <!-- Lifestyle -->
             <div class="section-title">Lifestyle</div>
-            <div class="form-group"><label>Diet</label>{{ form.diet }}</div>
-            <div class="form-group"><label>Smoking</label>{{ form.smoking }}</div>
-            <div class="form-group"><label>Drinking</label>{{ form.drinking }}</div>
-            <div class="form-group"><label>Hobbies</label>{{ form.hobbies }}</div>
+            <div class="form-group"><label>Diet *</label>{{ form.diet }}</div>
+            <div class="form-group"><label>Smoking *</label>{{ form.smoking }}</div>
+            <div class="form-group"><label>Drinking *</label>{{ form.drinking }}</div>
+            <div class="form-group"><label>Hobbies *</label>{{ form.hobbies }}</div>
 
             <!-- Family Info -->
             <div class="section-title">Family Info</div>
-            <div class="form-group"><label>Father Name</label>{{ form.father_name }}</div>
-            <div class="form-group"><label>Mother Name</label>{{ form.mother_name }}</div>
-            <div class="form-group"><label>Father Occupation</label>{{ form.father_occupation }}</div>
-            <div class="form-group"><label>Mother Occupation</label>{{ form.mother_occupation }}</div>
-            <div class="form-group"><label>Sisters</label>{{ form.sisters }}</div>
-            <div class="form-group"><label>Brothers</label>{{ form.brothers }}</div>
-            <div class="form-group"><label>Family Type</label>{{ form.family_type }}</div>
+            <div class="form-group"><label>Father Name *</label>{{ form.father_name }}</div>
+            <div class="form-group"><label>Mother Name *</label>{{ form.mother_name }}</div>
+            <div class="form-group"><label>Father Occupation *</label>{{ form.father_occupation }}</div>
+            <div class="form-group"><label>Mother Occupation *</label>{{ form.mother_occupation }}</div>
+            <div class="form-group"><label>Sisters *</label>{{ form.sisters }}</div>
+            <div class="form-group"><label>Brothers *</label>{{ form.brothers }}</div>
+            <div class="form-group"><label>Family Type *</label>{{ form.family_type }}</div>
 
             <!-- About -->
             <div class="section-title">About</div>
-            <div class="form-group full-width"><label>About Me</label>{{ form.about_me }}</div>
-            <div class="form-group full-width"><label>Partner Preferences</label>{{ form.partner_preferences }}</div>
+            <div class="form-group full-width"><label>About Me *</label>{{ form.about_me }}</div>
+            <div class="form-group full-width"><label>Partner Preferences *</label>{{ form.partner_preferences }}</div>
 
             <!-- Identity -->
-            <div class="section-title">Identity Proof</div>
+            <div class="section-title">Identity Proof *</div>
             <div class="form-group full-width">
                 {% if form.instance.user.is_verified %}
                     <div class="image-preview" id="identityPreview">
