@@ -516,11 +516,15 @@ class UserProfile(models.Model):
         verbose_name = 'User Profile'
         verbose_name_plural = 'User Profiles'
 
+def user_profile_galary_image_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f"{instance.uid}.{ext}"
+    return os.path.join('uploads/user_galary/images/', filename)
 
 class UploadImage(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     galary = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_profile', blank=True, null=True,)
-    image = models.ImageField(upload_to=user_profile_image_upload_path, null=True, blank=True)
+    image = models.ImageField(upload_to=user_profile_galary_image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -538,7 +542,7 @@ class UploadImage(models.Model):
                 if old_instance.image and old_instance.image != self.image:
                     if os.path.exists(old_instance.image.path):
                         os.remove(old_instance.image.path)
-            except UserProfile.DoesNotExist:
+            except UploadImage.DoesNotExist:
                 pass  # new object, no old image to delete
         # Save normally first if new file not yet saved
         if self.image:
