@@ -15,55 +15,80 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 100px;
+      padding: 50px 20px;
       transition: background 0.3s ease;
     }
 
-    h1 {
+    .header {
       text-align: center;
+      margin-bottom: 40px;
+      padding: 50px;
+      animation: slideInDown 0.5s ease;
+    }
+
+    h1 {
       color: #d6336c;
       font-family: "Cinzel", serif;
-      margin: 20px 15px;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      margin-bottom: 8px;
       text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
+    }
+
+    .tagline {
+      color: #666;
+      font-size: 1.05rem;
+      font-weight: 300;
     }
 
     .container {
       width: 100%;
-      max-width: 600px;
-      margin: 20px auto 60px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 35px 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 45px 35px;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(214, 51, 108, 0.18);
       backdrop-filter: blur(8px);
       transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease 0.1s both;
+      margin-bottom: 50px;
     }
 
     .container:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 45px rgba(214, 51, 108, 0.22);
     }
 
     label {
       display: block;
-      margin-top: 18px;
+      margin-top: 22px;
       color: #d6336c;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     select,
     textarea,
-    input[type="number"] {
+    input[type="number"],
+    input[type="text"],
+    input[type="email"] {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(214, 51, 108, 0.3);
-      margin-top: 8px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 2px solid rgba(214, 51, 108, 0.2);
+      margin-top: 0;
       font-size: 0.95rem;
       background: #fffafc;
-      transition: border 0.3s ease, box-shadow 0.3s ease;
+      font-family: "Poppins", sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    select:hover,
+    textarea:hover,
+    input:hover {
+      border-color: rgba(214, 51, 108, 0.35);
     }
 
     select:focus,
@@ -71,64 +96,87 @@
     input:focus {
       outline: none;
       border-color: #ff5c8d;
-      box-shadow: 0 0 6px rgba(214, 51, 108, 0.25);
+      box-shadow: 0 0 12px rgba(214, 51, 108, 0.25), inset 0 2px 4px rgba(214, 51, 108, 0.05);
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 120px;
       resize: vertical;
+    }
+
+    .rating-container {
+      margin-top: 22px;
+    }
+
+    .rating-label {
+      display: block;
+      color: #d6336c;
+      font-weight: 600;
+      font-size: 0.98rem;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .stars {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin: 18px 0 10px;
+      gap: 12px;
+      margin-bottom: 15px;
       flex-wrap: wrap;
     }
 
     .star {
-      font-size: 32px;
-      color: #ccc;
+      font-size: 40px;
+      color: #e0e0e0;
       cursor: pointer;
-      transition: transform 0.2s ease, color 0.3s ease;
+      transition: all 0.2s ease;
       user-select: none;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .star:hover {
-      transform: scale(1.2);
+      transform: scale(1.15) rotate(10deg);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     }
 
     .star.selected,
     .star.hovered {
       color: #ffbf00;
-      text-shadow: 0 0 8px rgba(255, 191, 0, 0.5);
+      text-shadow: 0 0 12px rgba(255, 191, 0, 0.6);
+      filter: drop-shadow(0 0 8px rgba(255, 191, 0, 0.4));
+    }
+
+    .rating-input {
+      display: none;
     }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 14px;
-      margin-top: 25px;
+      padding: 16px;
+      margin-top: 30px;
       border: none;
       background: linear-gradient(90deg, #d6336c, #ff8fab);
       color: #fff;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.05rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.25);
+      box-shadow: 0 6px 16px rgba(214, 51, 108, 0.28);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     .btn:hover {
       background: linear-gradient(90deg, #c1275a, #ff6a9b);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(214, 51, 108, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(214, 51, 108, 0.35);
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     /* ✅ Popup overlay */
@@ -139,55 +187,116 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(3px);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      animation: fadeOverlay 0.3s ease;
     }
 
     .popup-box {
       background: #fff;
-      padding: 35px 45px;
-      border-radius: 20px;
+      padding: 50px 40px;
+      border-radius: 25px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      animation: fadeIn 0.4s ease;
+      box-shadow: 0 20px 60px rgba(214, 51, 108, 0.3);
+      animation: popupScale 0.4s ease;
       max-width: 90%;
+      position: relative;
+    }
+
+    .popup-box::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #ffbf00, #ffeb3b);
+      border-radius: 50%;
+      animation: bounce 0.6s ease;
+      box-shadow: 0 4px 12px rgba(255, 191, 0, 0.3);
+    }
+
+    .popup-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      animation: spin 0.6s ease;
     }
 
     .popup-box h3 {
       color: #d6336c;
       margin-bottom: 12px;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-family: "Cinzel", serif;
+      font-weight: 700;
     }
 
     .popup-box p {
-      color: #444;
-      font-size: 1rem;
+      color: #555;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
     }
 
     .popup-box button {
-      margin-top: 18px;
+      margin-top: 25px;
       background: linear-gradient(90deg, #d6336c, #ff8fab);
       color: #fff;
-      padding: 10px 24px;
+      padding: 13px 35px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
+      font-weight: 700;
+      font-size: 0.98rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
 
     .popup-box button:hover {
       background: linear-gradient(90deg, #c1275a, #ff6a9b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(214, 51, 108, 0.3);
     }
 
-    @keyframes fadeIn {
+    @keyframes slideInDown {
       from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOverlay {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes popupScale {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
       }
       to {
         opacity: 1;
@@ -195,58 +304,129 @@
       }
     }
 
-    /* 📱 Mobile */
-    @media (max-width: 600px) {
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(-15px);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg) scale(0.8);
+      }
+      to {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    /* Form errors styling */
+    .errorlist {
+      list-style: none;
+      color: #d6336c;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .errorlist li {
+      padding: 4px 8px;
+      background: #ffe6ef;
+      border-radius: 6px;
+      margin: 4px 0;
+    }
+
+    /* 📱 Mobile Responsive */
+    @media (max-width: 700px) {
       body {
-        padding-top: 80px;
+        padding: 30px 15px;
       }
+
+      .header {
+        margin-bottom: 30px;
+      }
+
       h1 {
-        font-size: 1.6rem;
-        margin: 15px;
+        font-size: 2rem;
       }
-      .container {
-        padding: 25px 20px;
-      }
-      .btn {
+
+      .tagline {
         font-size: 0.95rem;
       }
+
+      .container {
+        padding: 30px 20px;
+        max-width: 100%;
+      }
+
       .star {
-        font-size: 26px;
+        font-size: 32px;
+        gap: 8px;
+      }
+
+      label {
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        font-size: 1rem;
+        padding: 14px;
+      }
+
+      .popup-box {
+        padding: 40px 25px;
+      }
+
+      .popup-box h3 {
+        font-size: 1.5rem;
+      }
+
+      .popup-box p {
+        font-size: 1rem;
       }
     }
   </style>
 
-  <h1>💬 Share Your Feedback</h1>
+  <div class="header">
+    <h1>💬 Share Your Feedback</h1>
+    <p class="tagline">Help us improve your experience. Your feedback matters!</p>
+  </div>
 
   <div class="container">
     <form id="feedbackForm" method="post">
       {% csrf_token %}
-      <label for="id_feedback_type">Feedback Type:</label>
+
+      <label for="id_feedback_type">📋 Feedback Type:</label>
       {{ form.feedback_type }}
 
-      <label for="id_message">Message:</label>
+      <label for="id_message">💭 Your Message:</label>
       {{ form.message }}
 
-      <label>Rating:</label>
-      <div class="stars">
-        <span class="star" data-value="1">&#9733;</span>
-        <span class="star" data-value="2">&#9733;</span>
-        <span class="star" data-value="3">&#9733;</span>
-        <span class="star" data-value="4">&#9733;</span>
-        <span class="star" data-value="5">&#9733;</span>
+      <div class="rating-container">
+        <span class="rating-label">⭐ How would you rate us?</span>
+        <div class="stars">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        {{ form.rating }}
       </div>
-      {{ form.rating }}
 
-      <button type="submit" class="btn">Submit Feedback</button>
+      <button type="submit" class="btn">✉️ Submit Feedback</button>
     </form>
   </div>
 
-  <!-- Popup -->
+  <!-- Success Popup -->
   <div class="popup-overlay" id="popup">
     <div class="popup-box">
-      <h3>🎉 Thank You!</h3>
+      <div class="popup-icon">🎉</div>
+      <h3>Thank You!</h3>
       <p>Your feedback has been submitted successfully.</p>
-      <button onclick="closePopup()">Close</button>
+      <p style="color: #999; font-size: 0.9rem;">We appreciate your valuable input!</p>
+      <button onclick="closePopup()">Continue</button>
     </div>
   </div>
 {% endblock %}
@@ -257,6 +437,7 @@
     const ratingInput = document.getElementById("id_rating");
     let selectedRating = 0;
 
+    // Star hover and click functionality
     stars.forEach((star) => {
       star.addEventListener("mouseover", () => {
         stars.forEach((s) => s.classList.remove("hovered"));
@@ -264,9 +445,11 @@
           stars[i].classList.add("hovered");
         }
       });
+
       star.addEventListener("mouseout", () => {
         stars.forEach((s) => s.classList.remove("hovered"));
       });
+
       star.addEventListener("click", () => {
         selectedRating = star.dataset.value;
         ratingInput.value = selectedRating;
@@ -277,13 +460,21 @@
       });
     });
 
+    // Form submission
     const form = document.getElementById("feedbackForm");
     const popup = document.getElementById("popup");
 
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
 
+      // Validate rating
+      if (selectedRating === 0) {
+        alert("Please select a rating!");
+        return;
+      }
+
       const formData = new FormData(this);
+
       try {
         const response = await fetch("", {
           method: "POST",
@@ -294,7 +485,13 @@
         if (response.ok) {
           popup.style.display = "flex";
           form.reset();
+          selectedRating = 0;
           stars.forEach((s) => s.classList.remove("selected", "hovered"));
+          
+          // Auto-close popup and redirect after 3 seconds
+          setTimeout(() => {
+            window.location.href = "{% url 'profiles_list' %}";
+          }, 3000); // 3 seconds
         } else {
           alert("Something went wrong. Please try again!");
         }

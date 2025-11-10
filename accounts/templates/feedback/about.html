@@ -15,88 +15,479 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 100px;
+      padding: 50px 20px;
       transition: background 0.3s ease;
     }
 
-    h1 {
+    .header {
       text-align: center;
+      margin-bottom: 40px;
+      padding: 50px;
+      animation: slideInDown 0.6s ease;
+    }
+
+    h1 {
       color: #d6336c;
       font-family: "Cinzel", serif;
-      margin: 20px 15px;
-      font-size: 2rem;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
       text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #999;
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
     }
 
     .container {
       width: 100%;
-      max-width: 700px;
-      margin: 20px auto 60px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 35px 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 50px 40px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(214, 51, 108, 0.16);
       backdrop-filter: blur(8px);
       transition: all 0.3s ease;
       overflow-y: auto;
-      max-height: 70vh;
+      max-height: 75vh;
+      animation: fadeInUp 0.7s ease 0.1s both;
+      margin-bottom: 50px;
     }
 
     .container:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(214, 51, 108, 0.22);
     }
 
-    p, li {
-      margin-top: 12px;
-      color: #444;
-      line-height: 1.6;
-      font-size: 0.95rem;
+    /* Scrollbar styling */
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .container::-webkit-scrollbar-track {
+      background: rgba(214, 51, 108, 0.05);
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #d6336c, #ff8fab);
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #c1275a, #ff6a9b);
+    }
+
+    .intro {
+      font-size: 1.1rem;
+      color: #333;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255, 197, 216, 0.1), rgba(255, 225, 225, 0.1));
+      border-radius: 15px;
+      border-left: 4px solid #ff8fab;
+    }
+
+    .intro strong {
+      color: #d6336c;
+      font-weight: 700;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 35px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #fffafc, #fff5e1);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid rgba(214, 51, 108, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: #ff8fab;
+      box-shadow: 0 8px 20px rgba(214, 51, 108, 0.12);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      color: #d6336c;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      font-family: "Cinzel", serif;
+    }
+
+    .feature-text {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .highlights {
+      background: linear-gradient(135deg, rgba(255, 197, 216, 0.08), rgba(255, 225, 225, 0.08));
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 35px;
+      border: 2px solid rgba(214, 51, 108, 0.1);
+    }
+
+    .highlights h3 {
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 700;
     }
 
     ul {
-      padding-left: 18px;
+      list-style: none;
+      padding: 0;
     }
 
-    /* 📱 Mobile */
+    li {
+      margin: 14px 0;
+      color: #555;
+      line-height: 1.7;
+      font-size: 0.98rem;
+      padding-left: 30px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    li:hover {
+      color: #d6336c;
+      padding-left: 38px;
+    }
+
+    li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #ff8fab;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .values-section {
+      margin-top: 40px;
+      padding-top: 35px;
+      border-top: 2px solid rgba(214, 51, 108, 0.15);
+    }
+
+    .values-section h3 {
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+
+    .value-item {
+      background: linear-gradient(135deg, #fffafc, rgba(255, 225, 225, 0.3));
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(214, 51, 108, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .value-item:hover {
+      transform: translateY(-4px);
+      border-color: #ff8fab;
+      box-shadow: 0 6px 16px rgba(214, 51, 108, 0.1);
+    }
+
+    .value-emoji {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .value-name {
+      color: #d6336c;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: "Cinzel", serif;
+    }
+
+    .cta-section {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 35px;
+      border-top: 2px solid rgba(214, 51, 108, 0.15);
+    }
+
+    .cta-section p {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .cta-links {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 12px 28px;
+      background: linear-gradient(90deg, #d6336c, #ff8fab);
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.25);
+      border: 2px solid transparent;
+    }
+
+    .cta-btn:hover {
+      background: linear-gradient(90deg, #c1275a, #ff6a9b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(214, 51, 108, 0.3);
+    }
+
+    .cta-btn-secondary {
+      background: transparent;
+      color: #d6336c;
+      border: 2px solid #d6336c;
+      box-shadow: none;
+    }
+
+    .cta-btn-secondary:hover {
+      background: #fffafc;
+      border-color: #ff8fab;
+      color: #ff8fab;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 📱 Mobile Responsive */
+    @media (max-width: 800px) {
+      body {
+        padding: 30px 15px;
+      }
+
+      .header {
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .container {
+        padding: 30px 25px;
+        max-height: 80vh;
+        margin-bottom: 30px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .cta-links {
+        flex-direction: column;
+      }
+
+      .cta-btn {
+        width: 100%;
+      }
+
+      .intro {
+        font-size: 1rem;
+        padding: 15px;
+      }
+
+      li {
+        font-size: 0.93rem;
+        padding-left: 25px;
+      }
+
+      li:hover {
+        padding-left: 30px;
+      }
+    }
+
     @media (max-width: 600px) {
       body {
-        padding-top: 80px;
+        padding: 25px 12px;
       }
+
       h1 {
         font-size: 1.6rem;
-        margin: 15px;
       }
+
       .container {
-        padding: 25px 20px;
+        padding: 20px 18px;
+        max-height: 85vh;
+      }
+
+      .highlights h3,
+      .values-section h3 {
+        font-size: 1.15rem;
+      }
+
+      .feature-card {
+        padding: 15px;
+      }
+
+      .value-emoji {
+        font-size: 1.5rem;
+      }
+
+      .value-name {
+        font-size: 0.85rem;
       }
     }
   </style>
 
-  <h1>🌸 About Us</h1>
+  <div class="header">
+    <h1>🌸 About Us</h1>
+    <p class="subtitle">Building Connections, Creating Futures</p>
+  </div>
 
   <div class="container">
-    <p>Welcome to Vivah Website! We are committed to helping individuals find meaningful relationships and lifelong partners with trust, authenticity, and care.</p>
+    <!-- Introduction -->
+    <div class="intro">
+      <strong>Welcome to Vivah Journey!</strong> We are passionate about helping individuals find meaningful relationships and discover their perfect life partners with trust, authenticity, and genuine care.
+    </div>
 
-    <ul>
-      <li>Our platform is designed to connect like-minded individuals looking for serious relationships.</li>
-      <li>We prioritize privacy, safety, and authenticity for all users.</li>
-      <li>All profiles are verified to ensure genuine interactions.</li>
-      <li>We provide tools like chat, interests, and matches to help users connect effectively.</li>
-      <li>Feedback and support are always available to improve your experience.</li>
-      <li>By using our services, you agree to our Terms & Conditions and Privacy Policy.</li>
-      <li>Our platform is designed to connect like-minded individuals looking for serious relationships.</li>
-      <li>We prioritize privacy, safety, and authenticity for all users.</li>
-      <li>All profiles are verified to ensure genuine interactions.</li>
-      <li>We provide tools like chat, interests, and matches to help users connect effectively.</li>
-      <li>Feedback and support are always available to improve your experience.</li>
-      <li>By using our services, you agree to our Terms & Conditions and Privacy Policy.</li>
-      <li>Our platform is designed to connect like-minded individuals looking for serious relationships.</li>
-      <li>We prioritize privacy, safety, and authenticity for all users.</li>
-      <li>All profiles are verified to ensure genuine interactions.</li>
-      <li>We provide tools like chat, interests, and matches to help users connect effectively.</li>
-      <li>Feedback and support are always available to improve your experience.</li>
-      <li>By using our services, you agree to our Terms & Conditions and Privacy Policy.</li>
-    </ul>
+    <!-- Features Grid -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💫</div>
+        <div class="feature-title">Our Mission</div>
+        <div class="feature-text">Connect like-minded individuals seeking genuine, long-lasting relationships and lifelong companionship.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Your Safety</div>
+        <div class="feature-text">We prioritize your privacy, security, and authenticity with verified profiles and secure interactions.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💝</div>
+        <div class="feature-title">Our Promise</div>
+        <div class="feature-text">Authentic connections built on trust, respect, and genuine intentions for meaningful relationships.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-title">Premium Features</div>
+        <div class="feature-text">Advanced tools including chat, interest matching, and smart recommendations to help you connect.</div>
+      </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="highlights">
+      <h3>✨ Why Choose Vivah Journey?</h3>
+      <ul>
+        <li>Our platform is designed specifically to connect like-minded individuals seeking serious, long-term relationships</li>
+        <li>We prioritize privacy, safety, and authenticity for all our valued users</li>
+        <li>All profiles are carefully verified to ensure genuine interactions and honest connections</li>
+        <li>Advanced features like intelligent chat, interest-based matching, and smart recommendations</li>
+        <li>Comprehensive support team available to assist with any questions or concerns</li>
+        <li>Regular updates and improvements based on user feedback and latest technology</li>
+        <li>Transparent policies with clear Terms & Conditions and Privacy Protection</li>
+        <li>Community-driven approach focused on building lasting relationships</li>
+      </ul>
+    </div>
+
+    <!-- Core Values -->
+    <div class="values-section">
+      <h3>🎯 Our Core Values</h3>
+      <div class="values-grid">
+        <div class="value-item">
+          <div class="value-emoji">🤝</div>
+          <div class="value-name">Trust</div>
+        </div>
+        <div class="value-item">
+          <div class="value-emoji">🎯</div>
+          <div class="value-name">Authenticity</div>
+        </div>
+        <div class="value-item">
+          <div class="value-emoji">💪</div>
+          <div class="value-name">Integrity</div>
+        </div>
+        <div class="value-item">
+          <div class="value-emoji">❤️</div>
+          <div class="value-name">Care</div>
+        </div>
+        <div class="value-item">
+          <div class="value-emoji">🔐</div>
+          <div class="value-name">Privacy</div>
+        </div>
+        <div class="value-item">
+          <div class="value-emoji">🌟</div>
+          <div class="value-name">Excellence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <p>Ready to find your perfect match? Join our community of singles looking for meaningful relationships today!</p>
+      <div class="cta-links">
+        <a href="{% url 'profiles_list' %}" class="cta-btn">👥 Browse Profiles</a>
+        <a href="{% url 'help' %}" class="cta-btn cta-btn-secondary">💬 Get Help</a>
+      </div>
+    </div>
   </div>
 {% endblock %}

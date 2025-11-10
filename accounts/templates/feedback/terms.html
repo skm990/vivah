@@ -15,94 +15,500 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 100px;
+      padding: 50px 20px;
       transition: background 0.3s ease;
     }
 
-    h1 {
+    .header {
       text-align: center;
+      margin-bottom: 40px;
+      padding: 50px;
+      animation: slideInDown 0.6s ease;
+    }
+
+    h1 {
       color: #d6336c;
       font-family: "Cinzel", serif;
-      margin: 20px 15px;
-      font-size: 2rem;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
       text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #999;
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
     }
 
     .container {
       width: 100%;
-      max-width: 700px;
-      margin: 20px auto 60px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 35px 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      max-width: 850px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 50px 45px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(214, 51, 108, 0.16);
       backdrop-filter: blur(8px);
       transition: all 0.3s ease;
       overflow-y: auto;
-      max-height: 70vh;
+      max-height: 75vh;
+      animation: fadeInUp 0.7s ease 0.1s both;
+      margin-bottom: 50px;
     }
 
     .container:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(214, 51, 108, 0.22);
+    }
+
+    /* Scrollbar styling */
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .container::-webkit-scrollbar-track {
+      background: rgba(214, 51, 108, 0.05);
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #d6336c, #ff8fab);
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #c1275a, #ff6a9b);
+    }
+
+    .intro-box {
+      background: linear-gradient(135deg, rgba(255, 197, 216, 0.12), rgba(255, 225, 225, 0.1));
+      padding: 22px 25px;
+      border-radius: 15px;
+      border-left: 5px solid #ff8fab;
+      margin-bottom: 35px;
+      line-height: 1.8;
+    }
+
+    .intro-box p {
+      color: #333;
+      font-size: 1.02rem;
+      margin: 0;
+    }
+
+    .intro-box strong {
+      color: #d6336c;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(214, 51, 108, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+    }
+
+    .terms-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .terms-list li {
+      margin: 14px 0;
+      padding-left: 32px;
+      position: relative;
+      color: #555;
+      line-height: 1.7;
+      font-size: 0.98rem;
+      transition: all 0.3s ease;
+    }
+
+    .terms-list li:hover {
+      color: #d6336c;
+      padding-left: 40px;
+    }
+
+    .terms-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #ff8fab;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(255, 191, 0, 0.05), rgba(255, 225, 225, 0.08));
+      padding: 20px 25px;
+      border-radius: 12px;
+      border-left: 4px solid #ffbf00;
+      margin: 25px 0;
+      line-height: 1.7;
+    }
+
+    .highlight-box strong {
+      color: #d6336c;
+    }
+
+    .highlight-box p {
+      color: #555;
+      font-size: 0.98rem;
+      margin: 0;
+    }
+
+    .important-section {
+      background: linear-gradient(135deg, rgba(214, 51, 108, 0.08), rgba(255, 197, 216, 0.08));
+      padding: 30px;
+      border-radius: 15px;
+      margin: 35px 0;
+      border: 2px solid rgba(214, 51, 108, 0.15);
+    }
+
+    .important-section h3 {
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .important-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .important-section li {
+      margin: 10px 0;
+      padding-left: 28px;
+      position: relative;
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .important-section li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #ff8fab;
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, rgba(214, 51, 108, 0.1), rgba(214, 51, 108, 0.05));
+      margin: 35px 0;
+    }
+
+    .acceptance-section {
+      background: linear-gradient(135deg, #fffafc, rgba(255, 225, 225, 0.15));
+      padding: 28px;
+      border-radius: 15px;
+      border: 2px solid rgba(214, 51, 108, 0.2);
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .acceptance-section h3 {
+      color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .acceptance-section p {
+      color: #666;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin: 10px 0;
+    }
+
+    .acceptance-section strong {
+      color: #d6336c;
+      font-weight: 700;
     }
 
     p, li {
       margin-top: 12px;
-      color: #444;
-      line-height: 1.6;
-      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.7;
+      font-size: 0.97rem;
     }
 
-    ul {
-      padding-left: 18px;
-    }
-
-    @keyframes fadeIn {
+    @keyframes slideInDown {
       from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(-30px);
       }
       to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
       }
     }
 
-    /* 📱 Mobile */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 📱 Mobile Responsive */
+    @media (max-width: 850px) {
+      body {
+        padding: 30px 15px;
+      }
+
+      .header {
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .container {
+        padding: 30px 25px;
+        max-height: 80vh;
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-size: 1.15rem;
+      }
+
+      .terms-list li {
+        font-size: 0.93rem;
+        padding-left: 28px;
+      }
+
+      .terms-list li:hover {
+        padding-left: 32px;
+      }
+
+      .important-section {
+        padding: 20px;
+      }
+
+      .acceptance-section {
+        padding: 20px;
+      }
+    }
+
     @media (max-width: 600px) {
       body {
-        padding-top: 80px;
+        padding: 25px 12px;
       }
+
       h1 {
         font-size: 1.6rem;
-        margin: 15px;
       }
+
       .container {
-        padding: 25px 20px;
+        padding: 20px 18px;
+        max-height: 85vh;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      .intro-box {
+        padding: 18px 20px;
+      }
+
+      .intro-box p {
+        font-size: 0.95rem;
+      }
+
+      .terms-list li {
+        font-size: 0.9rem;
+        padding-left: 25px;
+      }
+
+      .section-icon {
+        font-size: 1.3rem;
       }
     }
   </style>
 
-  <h1>📜 Terms & Conditions</h1>
+  <div class="header">
+    <h1>📜 Terms & Conditions</h1>
+    <p class="subtitle">Please read carefully before using our services</p>
+  </div>
 
   <div class="container">
-    <p>Welcome to Vivah Website! By using our services, you agree to comply with and be bound by the following terms and conditions:</p>
+    <!-- Introduction -->
+    <div class="intro-box">
+      <p>Welcome to <strong>Vivah Journey</strong>! By accessing and using our services, you agree to comply with and be bound by the following terms and conditions. Please read them thoroughly.</p>
+    </div>
 
-    <ul>
-      <li>Users must be above 18 years of age to register and use our services.</li>
-      <li>All information provided on profiles must be accurate, complete, and up-to-date.</li>
-      <li>Users are solely responsible for the authenticity of the details they share.</li>
-      <li>Any misuse, harassment, or offensive behavior is strictly prohibited and may lead to account termination.</li>
-      <li>We reserve the right to remove or modify any profile content without prior notice if it violates our policies.</li>
-      <li>Subscription payments, if any, are non-refundable unless stated otherwise.</li>
-      <li>Personal information is protected under our Privacy Policy. Please review it carefully.</li>
-      <li>We are not responsible for any interactions, meetings, or relationships initiated via the platform.</li>
-      <li>By using our services, you agree not to engage in fraudulent or illegal activities.</li>
-      <li>We may update these terms from time to time; continued use of the platform constitutes acceptance of updated terms.</li>
-    </ul>
+    <!-- Age & Eligibility Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">👤</span>
+        Age & Eligibility
+      </div>
+      <ul class="terms-list">
+        <li>Users must be 18 years of age or older to register and use our services.</li>
+        <li>By registering, you confirm that you meet all eligibility requirements.</li>
+        <li>We reserve the right to verify age and identity at any time.</li>
+      </ul>
+    </div>
 
+    <!-- Account Responsibility Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">🔐</span>
+        Account Responsibility
+      </div>
+      <ul class="terms-list">
+        <li>All information provided on your profile must be accurate, complete, and up-to-date.</li>
+        <li>You are solely responsible for the authenticity and truthfulness of details you share.</li>
+        <li>You must maintain the confidentiality of your account credentials and password.</li>
+        <li>Any unauthorized use of your account should be reported immediately.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <p><strong>⚠️ Note:</strong> Providing false or misleading information may result in immediate account suspension or termination.</p>
+      </div>
+    </div>
+
+    <!-- Prohibited Activities Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">🚫</span>
+        Prohibited Activities
+      </div>
+      <div class="important-section">
+        <h3>❌ We strictly prohibit:</h3>
+        <ul>
+          <li>Harassment, abuse, or offensive behavior toward other users</li>
+          <li>Spam, fraudulent activities, or misleading communication</li>
+          <li>Sharing explicit, inappropriate, or offensive content</li>
+          <li>Engaging in illegal activities or promoting harmful behavior</li>
+          <li>Creating fake profiles or impersonating other individuals</li>
+          <li>Attempting to access unauthorized areas of the platform</li>
+          <li>Collecting or misusing personal data of other users</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Content & Moderation Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">📋</span>
+        Content & Moderation
+      </div>
+      <ul class="terms-list">
+        <li>We reserve the right to remove or modify any profile content that violates our policies.</li>
+        <li>Profile moderation may occur without prior notice to maintain platform safety.</li>
+        <li>Repeated violations may lead to temporary suspension or permanent account termination.</li>
+        <li>We retain the right to use reported content for safety and compliance purposes.</li>
+      </ul>
+    </div>
+
+    <!-- Payments Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">💳</span>
+        Payments & Subscriptions
+      </div>
+      <ul class="terms-list">
+        <li>Subscription payments are processed securely through our payment partners.</li>
+        <li>Subscription fees and terms vary by plan. Please review before purchasing.</li>
+        <li>All subscription payments are final and non-refundable except where required by law.</li>
+        <li>We may modify pricing with 30 days' notice to existing subscribers.</li>
+        <li>Failed payment attempts may result in subscription suspension.</li>
+      </ul>
+    </div>
+
+    <!-- Privacy & Data Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">🔒</span>
+        Privacy & Data Protection
+      </div>
+      <ul class="terms-list">
+        <li>Your personal information is protected under our comprehensive Privacy Policy.</li>
+        <li>Please review our Privacy Policy to understand how we collect and use your data.</li>
+        <li>We implement industry-standard security measures to protect your information.</li>
+        <li>You have the right to access, modify, or delete your personal data at any time.</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Liability Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">⚖️</span>
+        Limitation of Liability
+      </div>
+      <ul class="terms-list">
+        <li>We are not responsible for any interactions, meetings, or relationships initiated through the platform.</li>
+        <li>Users assume full responsibility for any offline interactions or consequences.</li>
+        <li>We do not guarantee the accuracy or reliability of user-provided information.</li>
+        <li>We are not liable for indirect, incidental, or consequential damages arising from platform use.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <p><strong>Important:</strong> Always practice caution and verify information when meeting other users offline. Use common sense and follow safety guidelines.</p>
+      </div>
+    </div>
+
+    <!-- Platform Updates Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="section-icon">🔄</span>
+        Updates & Modifications
+      </div>
+      <ul class="terms-list">
+        <li>We may update these terms and conditions from time to time without notice.</li>
+        <li>Continued use of the platform after updates constitutes acceptance of new terms.</li>
+        <li>We may modify, suspend, or discontinue the platform or any feature at our discretion.</li>
+        <li>We will attempt to provide notice of major changes when possible.</li>
+      </ul>
+    </div>
+
+    <!-- Acceptance Section -->
+    <div class="acceptance-section">
+      <h3>✅ Your Acceptance</h3>
+      <p>By creating an account and using <strong>Vivah Journey</strong>, you explicitly agree to these Terms & Conditions.</p>
+      <p>If you do not agree with any part of these terms, please discontinue your use of the platform immediately.</p>
+      <p style="font-size: 0.9rem; color: #999; margin-top: 15px;">Last Updated: November 2024</p>
+    </div>
   </div>
 {% endblock %}
+
 {% block scripts %}
 {% endblock %}

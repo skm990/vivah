@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <style>
+<style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -15,59 +15,100 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 100px;
+      padding: 50px 20px;
       transition: background 0.3s ease;
     }
 
-    h1 {
+    .header {
       text-align: center;
+      margin-bottom: 50px;
+      padding: 50px;
+      animation: fadeInDown 0.6s ease;
+    }
+
+    h1 {
       color: #d6336c;
       font-family: "Cinzel", serif;
-      margin: 20px 15px;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
       text-shadow: 0 2px 6px rgba(214, 51, 108, 0.1);
     }
 
-    .container {
+    .subtitle {
+      color: #666;
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+
+    .content-wrapper {
       width: 100%;
-      max-width: 600px;
-      margin: 20px auto 60px;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .card {
       background: rgba(255, 255, 255, 0.9);
-      padding: 35px 25px;
+      padding: 35px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
       backdrop-filter: blur(8px);
       transition: all 0.3s ease;
-      text-align: center;
+      animation: fadeInUp 0.6s ease;
     }
 
-    .container:hover {
-      transform: translateY(-3px);
+    .card:hover {
+      transform: translateY(-5px);
       box-shadow: 0 14px 30px rgba(214, 51, 108, 0.2);
     }
 
-    .contact-info {
-      margin-top: 10px;
-      font-size: 1.05rem;
-      color: #333;
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
     }
 
-    .contact-info span {
+    .card-title {
       color: #d6336c;
+      font-family: "Cinzel", serif;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
       font-weight: 600;
+    }
+
+    .card-description {
+      color: #555;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .contact-method {
+      background: #fffafc;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-left: 4px solid #ff8fab;
+      color: #333;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+
+    .contact-method strong {
+      color: #d6336c;
     }
 
     .message-box {
       width: 100%;
-      margin-top: 25px;
-      text-align: left;
+      margin-top: 20px;
     }
 
-    label {
+    .message-box label {
       display: block;
       color: #d6336c;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
     }
 
     textarea {
@@ -77,9 +118,10 @@
       border: 1px solid rgba(214, 51, 108, 0.3);
       font-size: 0.95rem;
       background: #fffafc;
+      font-family: "Poppins", sans-serif;
       resize: vertical;
       transition: border 0.3s ease, box-shadow 0.3s ease;
-      min-height: 120px;
+      min-height: 100px;
     }
 
     textarea:focus {
@@ -90,8 +132,8 @@
 
     .btn {
       display: inline-block;
-      margin-top: 20px;
-      padding: 12px 26px;
+      margin-top: 15px;
+      padding: 12px 30px;
       background: linear-gradient(90deg, #d6336c, #ff8fab);
       color: #fff;
       border-radius: 10px;
@@ -102,6 +144,8 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(214, 51, 108, 0.25);
       text-decoration: none;
+      width: 100%;
+      text-align: center;
     }
 
     .btn:hover {
@@ -114,77 +158,234 @@
       transform: scale(0.98);
     }
 
-    .support-links {
-      margin-top: 30px;
-      font-size: 0.95rem;
-      color: #555;
+    .faq-section {
+      width: 100%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(214, 51, 108, 0.15);
+      margin-bottom: 50px;
+      animation: fadeInUp 0.6s ease 0.2s both;
     }
 
-    .support-links a {
+    .faq-title {
       color: #d6336c;
-      text-decoration: none;
+      font-family: "Cinzel", serif;
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-question {
+      color: #d6336c;
       font-weight: 600;
-      margin: 0 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.3s ease;
     }
 
-    .support-links a:hover {
-      text-decoration: underline;
+    .faq-question:hover {
+      color: #ff8fab;
     }
 
-    @media (max-width: 600px) {
-      body {
-        padding-top: 80px;
+    .faq-toggle {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+      color: #666;
+      margin-top: 10px;
+      line-height: 1.6;
+      display: none;
+      font-size: 0.95rem;
+    }
+
+    .faq-answer.active {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
       }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+      }
+    }
+
+    @media (max-width: 768px) {
       h1 {
-        font-size: 1.6rem;
+        font-size: 2rem;
       }
-      .container {
-        padding: 25px 20px;
+
+      .content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
       }
-      .btn {
-        font-size: 0.95rem;
+
+      .card {
+        padding: 25px;
+      }
+
+      .faq-section {
+        padding: 25px;
       }
     }
   </style>
+  <div class="header">
+    <h1>🆘 Help & Support</h1>
+    <p class="subtitle">We're here to help you with any questions</p>
+  </div>
 
-  <h1>🆘 Help & Support</h1>
+  <div class="content-wrapper">
+    <!-- Contact Card -->
+    <div class="card">
+      <div class="card-icon">✉️</div>
+      <div class="card-title">Get in Touch</div>
+      <p class="card-description">Have a question or feedback? Reach out to our support team via email. We'll get back to you within 24 hours.</p>
+      
+      <div class="contact-method">
+        <strong>Email:</strong><br>
+        <a href="mailto:myvivahjourney@gmail.com" style="color: #d6336c; text-decoration: none;">myvivahjourney@gmail.com</a>
+      </div>
 
-  <div class="container">
-    <p class="contact-info">
-      {% comment %} 📞 Contact Number: <span>+91 8579817969</span><br> {% endcomment %}
-      ✉️ Email: <span>myvivahjourney@gmail.com</span>
-    </p>
+      <div class="message-box">
+        <label for="supportMessage">Your Message:</label>
+        <textarea id="supportMessage" placeholder="Type your query or concern here..."></textarea>
+      </div>
 
-    <div class="message-box">
-      <label for="supportMessage">Write your message:</label>
-      <textarea id="supportMessage" placeholder="Type your query or concern here..."></textarea>
+      <button id="sendMailBtn" class="btn">📤 Send Message</button>
     </div>
 
-    <a
-      id="sendMailBtn"
-      href="#"
-      class="btn"
-    >
-      📤 Send Mail
-    </a>
+    <!-- Support Resources Card -->
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <div class="card-title">Support Resources</div>
+      <p class="card-description">Explore our comprehensive guides and documentation to find quick answers to common questions.</p>
 
-    {% comment %} <a
-      id="whatsappBtn"
-      href="https://wa.me/918579817969"
-      target="_blank"
-      class="btn"
-      style="margin-left:10px;"
-    >
-      💬 WhatsApp Support
-    </a> {% endcomment %}
+      <div class="contact-method" style="border-left-color: #ffc0d9; margin-top: 20px;">
+        <strong>📚 Documentation</strong><br>
+        Detailed guides and tutorials
+      </div>
 
-    <div class="support-links">
-      <p>Need quick help?</p>
+      <div class="contact-method" style="border-left-color: #ffc0d9;">
+        <strong>🎓 Video Tutorials</strong><br>
+        Step-by-step video guides
+      </div>
+
+      <div class="contact-method" style="border-left-color: #ffc0d9;">
+        <strong>🌐 Community Forum</strong><br>
+        Connect with other users
+      </div>
+
+      <button class="btn" onclick="alert('Community & Resources coming soon!')">🔗 Visit Resources</button>
     </div>
   </div>
-{% endblock %}
 
-{% block scripts %}
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <div class="faq-title">❓ Frequently Asked Questions</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How do I get started?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Getting started is easy! Simply sign up for an account, complete your profile, and begin exploring our features. Our onboarding tutorial will guide you through the basics.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>What if I forget my password?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Click on "Forgot Password" on the login page and enter your email address. You'll receive a password reset link within minutes to create a new password.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Is my data secure?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Yes! We use industry-standard encryption and security protocols to protect your personal information. Your privacy is our top priority.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How can I update my profile?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Go to your account settings and click on "Edit Profile". You can update your personal information, preferences, and other details at any time.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>What payment methods do you accept?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        We accept all major credit cards, debit cards, and digital payment methods. All transactions are secure and encrypted.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How do I contact support?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        You can reach our support team via email at myvivahjourney@gmail.com. We respond to all inquiries within 24 hours. Use the message box above to send your query directly.
+      </div>
+    </div>
+  </div>
+
   <script>
     const sendMailBtn = document.getElementById("sendMailBtn");
     const messageBox = document.getElementById("supportMessage");
@@ -192,14 +393,21 @@
     sendMailBtn.addEventListener("click", function (e) {
       e.preventDefault();
       const msg = encodeURIComponent(messageBox.value.trim());
-      window.location.href = `mailto:myvivahjourney@gmail.com?subject=Help%20&%20Support%20Request&body=${msg}`;
+      if (messageBox.value.trim()) {
+        window.location.href = `mailto:myvivahjourney@gmail.com?subject=Help%20&%20Support%20Request&body=${msg}`;
+      } else {
+        alert("Please write a message first!");
+      }
     });
-    // WhatsApp button
-    whatsappBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      const msg = encodeURIComponent(messageBox.value.trim() || "Hello, I need help regarding My Vivah Journey.");
-      // Opens WhatsApp chat with your number +91 8579817969
-      window.open(`https://wa.me/918579817969?text=${msg}`, "_blank");
-    });
+
+    function toggleFAQ(element) {
+      const answer = element.nextElementSibling;
+      const toggle = element.querySelector(".faq-toggle");
+      
+      answer.classList.toggle("active");
+      toggle.textContent = answer.classList.contains("active") ? "−" : "+";
+    }
   </script>
+{% endblock %}
+{% block scripts %}
 {% endblock %}
