@@ -90,6 +90,11 @@ def user_profile_identity_upload_path(instance, filename):
     filename = f"{instance.uid}.{ext}"
     return os.path.join('uploads/identity/images/', filename)
 
+def user_profile_galary_image_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f"{instance.uid}.{ext}"
+    return os.path.join('uploads/user_galary/images/', filename)
+
 class UserProfile(models.Model):
     GENDER_CHOICES = [
         ('Male', 'Male'),
@@ -516,14 +521,10 @@ class UserProfile(models.Model):
         verbose_name = 'User Profile'
         verbose_name_plural = 'User Profiles'
 
-def user_profile_galary_image_upload_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = f"{instance.uid}.{ext}"
-    return os.path.join('uploads/user_galary/images/', filename)
 
 class UploadImage(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    galary = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_profile', blank=True, null=True,)
+    galary = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='gallery_image', blank=True, null=True,)
     image = models.ImageField(upload_to=user_profile_galary_image_upload_path, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True)

@@ -116,7 +116,7 @@ def create_profile_view(request):
     else:
         form = UserProfileForm(instance=user_profile)
     # Existing uploaded gallery images
-    gallery_images = user_profile.user_profile.all()  # related_name in UploadImage
+    gallery_images = user_profile.gallery_image.all()  # related_name in UploadImage
     context = {
         "form": form,
         "first_name": request.user.first_name,
@@ -160,7 +160,7 @@ def profiles_list(request):
     profiles = (
         UserProfile.objects
         .select_related('user')
-        .prefetch_related('user_profile')  # Fetch gallery images efficiently
+        .prefetch_related('gallery_image')  # Fetch gallery images efficiently
         .all()
     )
     # --- 🔹 Filter opposite gender ---
@@ -379,7 +379,7 @@ def help_view(request):
 def user_profile_detail(request, uid):
     # DO NOT override uid here
     profile = get_object_or_404(
-        UserProfile.objects.select_related('user').prefetch_related('user_profile'),
+        UserProfile.objects.select_related('user').prefetch_related('gallery_image'),
         uid=uid
     )
     gallery_images = UploadImage.objects.filter(galary=profile)
