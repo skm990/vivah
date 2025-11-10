@@ -7,7 +7,6 @@ from accounts.models import (
     UserProfile,
     UserOtp,
     key_generator,
-    WelcomeMail,
     ProfileInterest,
     UploadImage,
     Feedback,
@@ -190,7 +189,6 @@ class PremiumUserAdmin(admin.ModelAdmin):
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(UserOtp, UserOtpAdmin)
-admin.site.register(WelcomeMail)
 
 # Set custom admin titles
 admin.site.site_title = _("VIVAH")  # Title for the browser tab

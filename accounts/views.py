@@ -1,24 +1,23 @@
-from django.contrib import messages
-from django.utils.timezone import now
-from datetime import timedelta
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.utils.crypto import get_random_string
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import UserOtp, UserAccount, WelcomeMail, UserProfile, ProfileInterest, UploadImage, ChatMessage, PremiumUser
-from .forms import EmailForm, OtpForm, LoginForm, UserProfileForm, FeedbackForm, PremiumUserForm
-from django.core.paginator import Paginator
-from .utils import send_otp_email, send_interest_email, send_interest_accept_email
-from datetime import date
-from django.db.models import Count
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.db.models import Q, Max, Count
-from django.db.models.functions import Greatest
+from datetime import date, timedelta
 import threading
 
+from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Max, Q
+from django.db.models.functions import Greatest
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+from django.http import JsonResponse
+
+from .forms import EmailForm, FeedbackForm, LoginForm, PremiumUserForm, OtpForm, UserProfileForm
+from .models import ChatMessage, PremiumUser, UploadImage, UserAccount, UserOtp, UserProfile, ProfileInterest
+from .utils import send_interest_accept_email, send_interest_email, send_otp_email
+from django.core.paginator import Paginator
+
 User = get_user_model()
+
 
 
 def request_otp_view(request):
@@ -30,12 +29,13 @@ def request_otp_view(request):
                 email=email,
                 defaults={'username': email.split('@')[0]}
             )
-            if created:
-                WelcomeMail.objects.create(user=user, welcome=False)
-                # messages.success(request, "Welcome email sent!")
             otp = get_random_string(length=6, allowed_chars='1234567890')
             UserOtp.objects.create(user=user, otp=otp)
-            send_otp_email(email, otp, user_name=user.get_full_name() or "User")
+            threading.Thread(
+                target=send_otp_email,
+                args=(email, otp, user.get_full_name() or "User"),
+                daemon=True  # ensures thread closes when request ends
+            ).start()
             request.session['email'] = email
             return redirect('verify_otp')
     else:
@@ -81,7 +81,6 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                # messages.success(request, "Login successful!")
                 return redirect('profiles_list')
             else:
                 messages.error(request, "Invalid email or password.")
@@ -109,9 +108,10 @@ def create_profile_view(request):
 
             profile.user = user
             profile.save()
-            # Save uploaded gallery images
-            for img in images:
-                UploadImage.objects.create(galary=profile, image=img)
+            # Bulk create gallery images to reduce DB hits
+            UploadImage.objects.bulk_create([
+                UploadImage(galary=profile, image=img) for img in images
+            ])
             return redirect('profiles_list')
     else:
         form = UserProfileForm(instance=user_profile)
@@ -139,11 +139,8 @@ def logout_view(request):
     return redirect('home')
 
 
-from django.utils.timezone import now
-
 @login_required
 def profiles_list(request):
-    gender = request.GET.get('gender')
     min_age = request.GET.get('min_age')
     max_age = request.GET.get('max_age')
     caste = request.GET.get('caste')
@@ -152,37 +149,25 @@ def profiles_list(request):
     city = request.GET.get('city')
     # --- Check if user has sent interest today ---
     today = now().date()
-    access_today = ProfileInterest.objects.filter(
-        sender=request.user,
-        created_at__date=today
-    ).count()
-    # Start with all profiles
-    profiles = (
-        UserProfile.objects
-        .select_related('user')
-        .prefetch_related('gallery_image')  # Fetch gallery images efficiently
-        .all()
-    )
-    # --- 🔹 Filter opposite gender ---
-    try:
-        current_user_profile = UserProfile.objects.get(user=request.user)
-        if current_user_profile.gender == "Male":
-            profiles = profiles.filter(gender__iexact="Female")
-        elif current_user_profile.gender == "Female":
-            profiles = profiles.filter(gender__iexact="Male")
-        else:
-            profiles = profiles.exclude(user=request.user)  # show all except self if 'Other'
-    except UserProfile.DoesNotExist:
-        pass  # no user profile, show all
-    # --- 🔹 Exclude own profile ---
-    profiles = profiles.exclude(user=request.user)
-    # --- Apply filters from GET form ---
-    if gender:
-        profiles = profiles.filter(gender__iexact=gender)
-    if min_age:
-        profiles = profiles.filter(age__gte=min_age)
-    if max_age:
-        profiles = profiles.filter(age__lte=max_age)
+    access_today = ProfileInterest.objects.filter(sender=request.user, created_at__date=today).count()
+    # --- Base queryset ---
+    profiles = UserProfile.objects.select_related('user').prefetch_related('gallery_image').filter(user__is_verified=True).exclude(user=request.user)
+    # --- Filter opposite gender ---
+    current_user_profile = UserProfile.objects.filter(user=request.user).first()
+    if current_user_profile and current_user_profile.gender in ['Male', 'Female']:
+        opposite_gender = 'Female' if current_user_profile.gender == 'Male' else 'Male'
+        profiles = profiles.filter(gender__iexact=opposite_gender)
+    # --- Filter by age, caste, country, state, city ---
+    if min_age or max_age:
+        today = date.today()
+        if min_age:
+            min_age = int(min_age)
+            dob_max = date(today.year - min_age, today.month, today.day)
+            profiles = profiles.filter(dob__lte=dob_max)  # born before or on dob_max
+        if max_age:
+            max_age = int(max_age)
+            dob_min = date(today.year - max_age, today.month, today.day)
+            profiles = profiles.filter(dob__gte=dob_min)  # born after or on dob_min
     if caste:
         profiles = profiles.filter(caste__icontains=caste)
     if country:
@@ -191,57 +176,33 @@ def profiles_list(request):
         profiles = profiles.filter(state__icontains=state)
     if city:
         profiles = profiles.filter(city__icontains=city)
-    # --- Dropdown values ---
-    profiles = profiles.filter(user__is_verified=True)
-    countries = (
-        UserProfile.objects.values_list('country', flat=True)
-        .distinct()
-        .exclude(country__isnull=True)
-        .exclude(country__exact='')
-        .order_by('country')
-    )
-    states = (
-        UserProfile.objects.values_list('state', flat=True)
-        .distinct()
-        .exclude(state__isnull=True)
-        .exclude(state__exact='')
-        .order_by('state')
-    )
-    cities = (
-        UserProfile.objects.values_list('city', flat=True)
-        .distinct()
-        .exclude(city__isnull=True)
-        .exclude(city__exact='')
-        .order_by('city')
-    )
-    castes = (
-        UserProfile.objects.values_list('caste', flat=True)
-        .distinct()
-        .exclude(caste__isnull=True)
-        .exclude(caste__exact='')
-        .order_by('caste')
-    )
+    # --- Dropdowns ---
+    dropdown_fields = ['country', 'state', 'city', 'caste']
+    dropdowns = {}
+    for field in dropdown_fields:
+        dropdowns[field + 's'] = (
+            UserProfile.objects
+            .exclude(**{f"{field}__isnull": True})
+            .exclude(**{f"{field}": ''})
+            .values_list(field, flat=True)
+            .distinct()
+            .order_by(field)
+        )
     # --- Pagination ---
     paginator = Paginator(profiles, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # --- Interests (already sent) ---
-    sent_interest_ids = []
-    if request.user.is_authenticated:
-        sent_interest_ids = ProfileInterest.objects.filter(sender=request.user).values_list('receiver_id', flat=True)
-    # --- Check for active premium subscription ---
-    active_premium = PremiumUser.objects.filter(
-        user=request.user, is_premium=True, expiry_date__gt=now().date()
-    ).first()
+    # --- Sent interests ---
+    sent_interest_ids = ProfileInterest.objects.filter(sender=request.user).values_list('receiver_id', flat=True)
+    # --- Premium check ---
+    access_premium = PremiumUser.objects.filter(user=request.user, is_premium=True, expiry_date__gt=today).exists()
+    # --- Context ---
     context = {
         'profiles': page_obj,
-        'countries': countries,
-        'states': states,
-        'cities': cities,
-        'castes': castes,
         'sent_interest_ids': sent_interest_ids,
         'access_today': access_today,
-        'access_premium': 1 if active_premium else 0,
+        'access_premium': 1 if access_premium else 0,
+        **dropdowns
     }
     return render(request, 'profile/profiles_list.html', context)
 
@@ -264,7 +225,8 @@ def send_interest(request, profile_id):
     # Run email sending in background thread
     threading.Thread(
         target=send_interest_email,
-        args=(receiver_profile, request.user, sender_profile)
+        args=(receiver_profile, request.user, sender_profile),
+        daemon=True  # ensures thread closes when request ends
     ).start()
     # Check if interest already exists
     if ProfileInterest.objects.filter(sender=request.user, receiver=receiver_profile).exists():
@@ -313,7 +275,8 @@ def accept_interest(request, interest_id):
     # Run email sending in background thread
     threading.Thread(
         target=send_interest_accept_email,
-        args=(receiver_profile, interest.sender.email, interest.sender.first_name)
+        args=(receiver_profile, interest.sender.email, interest.sender.first_name),
+        daemon=True  # ensures thread closes when request ends
     ).start()
     return redirect(request.META.get('HTTP_REFERER', 'interest_list'))
 
@@ -392,7 +355,6 @@ def user_profile_detail(request, uid):
 
 @login_required
 def chat_view(request, receiver_email):
-    from django.contrib import messages
     user_profile = UserProfile.objects.filter(user=request.user).first()
     if not user_profile or not user_profile.identity_proof:
         messages.warning(request, "You must complete your profile first.")
@@ -498,8 +460,6 @@ def chat_home(request):
     user_data.sort(key=lambda x: (not x['has_unread'], x['timestamp'] or 0), reverse=False)
     return render(request, 'chat/chat_list.html', {'user_data': user_data})
 
-
-from django.http import JsonResponse
 
 @login_required
 def premium_form_view(request):
