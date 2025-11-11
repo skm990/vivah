@@ -11,8 +11,10 @@ from .models import Receipt, ReceiptFileRecord
 
 
 def download_receipt_pdf(request, uid):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.email not in ['admin@gmail.com', 'chandan@gmail.com']:
-        return HttpResponse("You are not authorized to access this page.")
+        return redirect('home')
     receipt = Receipt.objects.get(uid=uid)
     html_string = render_to_string('receipts/receipt_template.html', {'receipt': receipt})
     pdf_file = HTML(string=html_string).write_pdf()
@@ -22,8 +24,10 @@ def download_receipt_pdf(request, uid):
 
 
 def receipt_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.email not in ['admin@gmail.com', 'chandan@gmail.com']:
-        return HttpResponse("You are not authorized to access this page.")
+        return redirect('home')
     receipts = Receipt.objects.all().order_by('-created_at')
     # Calculate total baki across all records
     baki_summary = ReceiptFileRecord.objects.aggregate(total_baki=Sum('baki'))
@@ -44,8 +48,10 @@ def receipt_list(request):
 
 
 def edit_receipt_record(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.email not in ['admin@gmail.com', 'chandan@gmail.com']:
-        return HttpResponse("You are not authorized to access this page.")
+        return redirect('home')
     receipt = get_object_or_404(Receipt, pk=pk)
     # All previous records for this receipt
     existing_records = ReceiptFileRecord.objects.filter(receipt=receipt).order_by('-created_at')
@@ -81,8 +87,10 @@ def edit_receipt_record(request, pk):
 
 
 def edit_receipt(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.email not in ['admin@gmail.com', 'chandan@gmail.com']:
-        return HttpResponse("You are not authorized to access this page.")
+        return redirect('home')
     receipt = get_object_or_404(Receipt, pk=pk)
     if request.method == "POST":
         form = ReceiptForm(request.POST, instance=receipt)
@@ -95,8 +103,10 @@ def edit_receipt(request, pk):
 
 
 def add_receipt(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.email not in ['admin@gmail.com', 'chandan@gmail.com']:
-        return HttpResponse("You are not authorized to access this page.")
+        return redirect('home')
     if request.method == 'POST':
         form = ReceiptForm(request.POST)
         if form.is_valid():
