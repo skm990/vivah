@@ -298,28 +298,7 @@ def reject_interest(request, interest_id):
 
 
 def home_view(request):
-    """
-    Render the Vivah home page with local images.
-    """
-    context = {
-        # List of slider images from static folder
-        'slider_images': [
-            'images/c7.png',
-        ],
-        # Testimonials
-        'testimonials': [
-            "Vivah helped me find my soulmate. The process was simple, safe, and truly effective!",
-            "I met my life partner through Vivah and couldn’t be happier. Highly recommended!",
-            "A wonderful platform for serious relationships and lifelong companionship."
-        ],
-        # Steps
-        'steps': [
-            {"title": "Create Profile", "description": "Sign up and build a detailed profile showcasing yourself and your preferences."},
-            {"title": "Browse Profiles", "description": "Explore profiles of potential matches based on your preferences and interests."},
-            {"title": "Connect & Chat", "description": "Show interest, communicate safely, and take the first step toward lifelong love."},
-        ]
-    }
-    return render(request, "home.html", context)
+    return render(request, "home.html")
 
 
 def feedback_view(request):

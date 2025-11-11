@@ -176,6 +176,22 @@
             color: #764ba2;
             transform: translateX(-3px);
         }
+        .top-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+        }
+
+        .top-link:hover {
+        background: rgba(0, 0, 0, 0.35);
+        }
 
         @keyframes fadeInDown {
             from {
@@ -229,7 +245,7 @@
     </style>
 </head>
 <body>
-
+<a href="{% url 'receipt_list' %}" class="back-link top-link">⬅️ Back</a>
 <div class="header-section">
     <div class="academy-name">✨ Bright Future Academy ✨</div>
     <div class="academy-info">📍 स्थान - करुणा (भेड़िहरी टोल) 📞 Mob: 9631306932</div>
