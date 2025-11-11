@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Receipt Record</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -291,21 +292,22 @@
             align-items: center;
             gap: 4px;
         }
+
         .top-link {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 6px 12px;
-        border-radius: 8px;
-        transition: background 0.3s ease;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
         }
 
         .top-link:hover {
-        background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.35);
         }
 
         @media (max-width: 768px) {
@@ -347,7 +349,7 @@
     </style>
 </head>
 <body>
-<a href="{% url 'receipt_list' %}" class="back-link top-link">⬅️ Back</a>
+    <a href="{% url 'receipt_list' %}" class="back-link top-link">⬅️ Back</a>
 <div class="form-container">
     <!-- Header Section -->
     <div class="header-section">
