@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Receipt - Bright Future Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 30px 10px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    .academy-name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .academy-info {
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+
+    .form-section {
+      padding: 25px 20px 35px;
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 6px rgba(102, 126, 234, 0.4);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #667eea;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ✅ Mobile Responsive */
+    @media (max-width: 768px) {
+      .academy-name {
+        font-size: 1.4rem;
+      }
+
+      .form-title {
+        font-size: 1.3rem;
+      }
+
+      form {
+        gap: 12px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="academy-name">✨ Bright Future Academy ✨</div>
+      <div class="academy-info">📍 स्थान - करुणा (भेड़िहरी टोल) 📞 Mob: 9631306932</div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="form-title">➕ Add New Receipt</h2>
+      <form method="post">
+        {% csrf_token %}
+
+        {% comment %} <div>
+          <label for="id_date">Date</label>
+          <input type="date" name="date" id="id_date" required>
+        </div> {% endcomment %}
+
+        <div>
+          <label for="id_student_name">Student Name</label>
+          <input type="text" name="student_name" id="id_student_name" required>
+        </div>
+
+        <div>
+          <label for="id_father_name">Father Name</label>
+          <input type="text" name="father_name" id="id_father_name" required>
+        </div>
+
+        <div>
+          <label for="id_address">Address</label>
+          <textarea name="address" id="id_address" placeholder="Enter student address..."></textarea>
+        </div>
+
+        <div>
+          <label for="id_admission_no">Admission No</label>
+          <input type="text" name="admission_no" id="id_admission_no" required>
+        </div>
+
+        <div>
+          <label for="id_month">Month</label>
+          <select name="month" id="id_month" required>
+            <option value="">-- Select Month --</option>
+            {% for m,v in receipt.MONTH_CHOICES %}
+              <option value="{{ m }}">{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label for="id_year">Year</label>
+          <input type="text" name="year" id="id_year" placeholder="e.g. 2025" required>
+        </div>
+
+        <div>
+          <label for="id_class_name">Class Name</label>
+          <input type="text" name="class_name" id="id_class_name" placeholder="e.g. Class 10">
+        </div>
+
+        <div>
+          <label for="id_admission_fee">Admission Fee</label>
+          <input type="number" step="0.01" name="admission_fee" id="id_admission_fee" value="0">
+        </div>
+
+        <div>
+          <label for="id_tuition_fee">Tuition Fee</label>
+          <input type="number" step="0.01" name="tuition_fee" id="id_tuition_fee" value="0">
+        </div>
+
+        <div>
+          <label for="id_back_dues">Back Dues</label>
+          <input type="number" step="0.01" name="back_dues" id="id_back_dues" value="0">
+        </div>
+
+        <div>
+          <label for="id_extra">Extra Charges</label>
+          <input type="number" step="0.01" name="extra" id="id_extra" value="0">
+        </div>
+
+        <div>
+          <label for="id_description">Description</label>
+          <textarea name="description" id="id_description" placeholder="Optional description..."></textarea>
+        </div>
+
+        <div class="btn-container">
+          <button type="submit">💾 Save Receipt</button>
+        </div>
+      </form>
+
+      <a href="{% url 'receipt_list' %}" class="back-link">⬅️ Back to All Receipts</a>
+    </div>
+  </div>
+</body>
+</html>

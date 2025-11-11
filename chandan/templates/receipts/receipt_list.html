@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Receipts - Bright Future Academy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .academy-name {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .academy-info {
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+
+    .content {
+      padding: 30px 20px;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .total-baki {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 10px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 15px 10px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+    }
+
+    tr:hover {
+      background: #f8f9ff;
+      transition: background 0.3s ease;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .download {
+      background: #10b981;
+      color: white;
+    }
+
+    .download:hover {
+      background: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .edit-record {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .edit-record:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .edit-receipt {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .edit-receipt:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .amount {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .baki-amount {
+      font-weight: 600;
+      color: #f5576c;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .academy-name {
+        font-size: 1.5rem;
+      }
+
+      .academy-info {
+        font-size: 0.9rem;
+      }
+
+      .page-title {
+        font-size: 1.4rem;
+      }
+
+      .content {
+        padding: 20px 15px;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 10px 8px;
+      }
+
+      /* Stack table for mobile */
+      .table-container {
+        box-shadow: none;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      tr:hover {
+        background: white;
+      }
+
+      td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+        text-align: left;
+        color: #667eea;
+      }
+
+      .actions {
+        justify-content: flex-end;
+        padding-right: 10px;
+      }
+
+      .action-link {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .header {
+        padding: 20px 15px;
+      }
+
+      .academy-name {
+        font-size: 1.3rem;
+      }
+
+      .academy-info {
+        font-size: 0.85rem;
+      }
+
+      .total-baki {
+        font-size: 1rem;
+        padding: 12px 15px;
+      }
+
+      .action-link {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="academy-name">✨ Bright Future Academy ✨</div>
+      <div class="academy-info">📍 स्थान - करुणा (भेड़िहरी टोल) 📞 Mob: 9631306932</div>
+    </div>
+
+    <div class="content">
+      <h2 class="page-title">All Receipts</h2>
+
+      <div style="text-align: center; margin-bottom: 25px;">
+        <a href="{% url 'add_receipt' %}" 
+          style="
+              display: inline-block;
+              background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+              color: white;
+              padding: 10px 20px;
+              border-radius: 8px;
+              text-decoration: none;
+              font-weight: 600;
+              font-size: 1rem;
+              transition: all 0.3s ease;
+              box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+          "
+          onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 18px rgba(34, 197, 94, 0.4)';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(34, 197, 94, 0.3)';">
+          ➕ Add New Receipt
+        </a>
+      </div>
+
+      <!-- 🔍 Search Bar -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search by student name..."
+        style="
+            width: 90%;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        "
+        onkeyup="filterTable()"
+        >
+    </div>
+
+      <!-- Django template tag for total baki -->
+      {% if total_baki %}
+    <div class="total-baki">
+        💰 Total Remaining all Dues: ₹{{ total_baki }}
+    </div>
+    {% endif %}
+
+    <div class="table-container">
+        <table id="receiptTable">
+        <thead>
+            <tr>
+            <th>Receipt No</th>
+            <th>Student</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Total</th>
+            <th>Back Due</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for receipt in receipts %}
+            <tr>
+            <td data-label="Receipt No">{{ receipt.receipt_no }}</td>
+            <td data-label="Student">{{ receipt.student_name }}</td>
+            <td data-label="Month">{{ receipt.month }}</td>
+            <td data-label="Year">{{ receipt.year }}</td>
+            <td data-label="Total" class="amount">₹{{ receipt.total }}</td>
+            <td data-label="Baki" class="baki-amount">₹{{ receipt.total_baki }}</td>
+            <td data-label="Actions">
+                <div class="actions">
+                <a href="{% url 'download_receipt_pdf' receipt.uid %}" class="action-link download">⬇️ Download</a>
+                <a href="{% url 'edit_receipt_record' receipt.id %}" class="action-link edit-record">🧾 Record</a>
+                <a href="{% url 'edit_receipt' receipt.id %}" class="action-link edit-receipt">✏️ Edit</a>
+                </div>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    </div>
+
+  <!-- 🔍 JavaScript Live Search -->
+<script>
+  function filterTable() {
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("receiptTable");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) { // skip header row
+      const studentCell = rows[i].getElementsByTagName("td")[1];
+      if (studentCell) {
+        const name = studentCell.textContent || studentCell.innerText;
+        if (name.toLowerCase().indexOf(filter) > -1) {
+          rows[i].style.display = "";
+        } else {
+          rows[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>
