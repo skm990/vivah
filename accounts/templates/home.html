@@ -1,48 +1,79 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vivah</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Vivah - Find Your Perfect Match</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #fff3e0; color: #333; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            color: #333;
+            overflow-x: hidden;
+        }
         a { text-decoration: none; color: inherit; }
 
-        /* Navbar */
+        /* ===== NAVBAR ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 50px;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 18px 60px;
+            background: linear-gradient(135deg, #fff 0%, #fff5f7 100%);
+            box-shadow: 0 4px 15px rgba(214, 51, 108, 0.08);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         .navbar .logo {
             font-family: 'Cinzel', serif;
-            font-size: 28px;
-            color: #d6336c;
+            font-size: 32px;
+            background: linear-gradient(135deg, #d6336c, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 700;
+            letter-spacing: 1px;
         }
         .navbar .nav-links a {
-            margin-left: 25px;
-            font-weight: 500;
+            margin-left: 35px;
+            font-weight: 600;
             color: #d6336c;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        .navbar .nav-links a:hover { color: #ff8fab; }
+        .navbar .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+            transition: width 0.3s ease;
+        }
+        .navbar .nav-links a:hover:after { width: 100%; }
 
-        /* Hero Slider */
+        /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
             width: 100%;
-            min-height: 100vh; /* full viewport height */
+            height: 90vh;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #d6336c 0%, #ff8fab 100%);
+            z-index: 1;
         }
         .hero img {
             position: absolute;
@@ -50,18 +81,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ensures full coverage without distortion */
-            object-position: center;
+            object-fit: cover;
             opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+            transition: opacity 2s ease-in-out;
+            z-index: 2;
         }
-        .hero img.active { opacity: 1; }
+        .hero img.active { opacity: 0.7; }
 
         .hero .overlay {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(214, 51, 108, 0.3);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -69,295 +100,519 @@
             color: #fff;
             text-align: center;
             padding: 0 20px;
+            z-index: 3;
         }
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 4rem;
             font-family: 'Cinzel', serif;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            text-shadow: 3px 3px 12px rgba(0,0,0,0.4);
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: slideInDown 1s ease-out;
         }
         .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 30px;
-            max-width: 600px;
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            max-width: 650px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+            font-weight: 300;
         }
         .hero .btn {
-            padding: 12px 30px;
-            background: linear-gradient(90deg, #d6336c, #ff8fab);
-            color: white;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: 0.3s;
+            padding: 15px 45px;
+            background: linear-gradient(90deg, #fff, #fff);
+            color: #d6336c;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideInUp 1.2s ease-out;
+            font-size: 1.1rem;
         }
         .hero .btn:hover {
-            background: linear-gradient(90deg, #c2185b, #f06292);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #ffe6e6, #fff);
         }
 
-        /* Testimonials */
-        .quotes {
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats {
+            background: #fff;
             padding: 60px 20px;
-            background: #ffe6e6;
             text-align: center;
         }
-        .quotes h2 {
-            font-family: 'Cinzel', serif;
-            color: #d6336c;
-            margin-bottom: 40px;
-            font-size: 32px;
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
         }
-        .quotes p {
-            font-size: 20px;
-            max-width: 700px;
-            margin: 0 auto 20px;
-            font-style: italic;
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d6336c, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 500;
         }
 
-        /* How it works */
+        /* ===== HOW IT WORKS ===== */
         .how-it-works {
-            padding: 60px 20px;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff5f7 100%);
             text-align: center;
         }
         .how-it-works h2 {
             font-family: 'Cinzel', serif;
             color: #d6336c;
-            margin-bottom: 50px;
-            font-size: 32px;
+            margin-bottom: 60px;
+            font-size: 2.8rem;
+            font-weight: 700;
         }
         .steps {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 40px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .step {
             background: #fff;
-            padding: 25px 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            max-width: 250px;
-            transition: 0.3s;
+            padding: 40px 25px;
+            border-radius: 20px;
+            max-width: 280px;
+            box-shadow: 0 8px 25px rgba(214, 51, 108, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .step:hover { transform: translateY(-5px); }
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #d6336c, #ff8fab);
+        }
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(214, 51, 108, 0.2);
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d6336c, #ff8fab);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
         .step h3 {
             color: #d6336c;
             margin-bottom: 15px;
-            font-size: 22px;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
-        .step p { font-size: 16px; color: #555; }
+        .step p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
 
-        /* Footer */
-        footer {
-            background: #d6336c;
-            color: #fff;
-            padding: 30px 20px;
+        /* ===== FEATURED PROFILES ===== */
+        .featured-profiles {
+            padding: 80px 20px;
             text-align: center;
+            background: #fff;
         }
-        footer a { color: #fff; text-decoration: underline; }
-        footer p { margin: 10px 0; }
-
-        /* RESPONSIVE FIXES */
-        @media (max-width: 1024px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.1rem; }
-        }
-        @media (max-width: 768px) {
-            .navbar { padding: 15px 25px; }
-            .steps { flex-direction: column; align-items: center; }
-            .hero { min-height: 70vh; }
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .hero .btn { padding: 10px 24px; font-size: 0.9rem; }
-        }
-        @media (max-width: 480px) {
-            .hero { min-height: 60vh; }
-            .hero h1 { font-size: 1.6rem; }
-            .hero p { font-size: 0.9rem; }
-        }
-
-        /* Featured Profiles */
-        .featured-profiles, .blog, .success-stories {
-            padding: 60px 20px;
-            text-align: center;
-        }
-
-        .featured-profiles h2, .blog h2, .success-stories h2 {
+        .featured-profiles h2 {
             font-family: 'Cinzel', serif;
             color: #d6336c;
-            margin-bottom: 40px;
-            font-size: 32px;
+            margin-bottom: 50px;
+            font-size: 2.8rem;
+            font-weight: 700;
         }
-
-        .profile-cards, .blog-cards {
+        .profile-cards {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-        }
-
-        .profile-cards .card, .blog-cards .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 250px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: 0.3s;
-        }
-
-        .profile-cards .card:hover, .blog-cards .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .profile-cards .card img {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-
-        .profile-cards .card h3, .blog-cards .card h3 {
-            color: #d6336c;
-            margin-bottom: 10px;
-        }
-
-        .profile-cards .card p, .blog-cards .card p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .success-stories .stories {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 700px;
+            gap: 40px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-
-        .success-stories .story {
-            background: #fff0f5;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        .profile-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            max-width: 280px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
         }
-
-        .success-stories .story h4 {
-            margin-top: 10px;
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(214, 51, 108, 0.25);
+        }
+        .profile-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .profile-card:hover img {
+            transform: scale(1.05);
+        }
+        .profile-info {
+            padding: 25px;
+            background: linear-gradient(135deg, #fff 0%, #fff5f7 100%);
+        }
+        .profile-card h3 {
             color: #d6336c;
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .profile-card p {
+            font-size: 0.9rem;
+            color: #999;
+            font-weight: 500;
         }
 
-        /* Responsive */
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ffe6e6 0%, #fff5f7 100%);
+            text-align: center;
+        }
+        .testimonials h2 {
+            font-family: 'Cinzel', serif;
+            color: #d6336c;
+            margin-bottom: 60px;
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+        .testimonial-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .testimonial {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 350px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(214, 51, 108, 0.15);
+        }
+        .stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .testimonial p {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .testimonial h4 {
+            color: #d6336c;
+            font-weight: 700;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #d6336c 0%, #ff8fab 100%);
+            color: white;
+        }
+        .cta h2 {
+            font-family: 'Cinzel', serif;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+        .cta .btn {
+            padding: 15px 45px;
+            background: white;
+            color: #d6336c;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .cta .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #2d2d2d;
+            color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        .footer-section h4 {
+            color: #ff8fab;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .footer-section a {
+            display: block;
+            margin: 8px 0;
+            color: #ccc;
+            transition: 0.3s;
+        }
+        .footer-section a:hover { color: #ff8fab; }
+        .footer-bottom {
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+        footer a { text-decoration: underline; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3rem; }
+            .hero p { font-size: 1.1rem; }
+            .navbar { padding: 15px 40px; }
+        }
         @media (max-width: 768px) {
-            .profile-cards, .blog-cards {
+            .navbar { padding: 15px 20px; }
+            .navbar .nav-links a { margin-left: 20px; font-size: 0.9rem; }
+            .hero { height: 70vh; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 0.95rem; }
+            .hero .btn { padding: 12px 30px; font-size: 0.95rem; }
+            .stats-grid { gap: 40px; }
+            .stat-number { font-size: 2rem; }
+            .steps, .profile-cards, .testimonial-grid {
                 flex-direction: column;
                 align-items: center;
             }
+            .step, .profile-card, .testimonial {
+                max-width: 100%;
+                width: 90%;
+            }
+            .cta h2 { font-size: 1.8rem; }
+            .footer-content { flex-direction: column; gap: 20px; }
         }
-
+        @media (max-width: 480px) {
+            .hero { height: 60vh; }
+            .hero h1 { font-size: 1.5rem; }
+            .hero p { font-size: 0.85rem; }
+            .featured-profiles h2, .how-it-works h2, .testimonials h2 {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <div class="navbar">
-        <div class="logo">Vivah</div>
+        <div class="logo">💕 Vivah</div>
         <div class="nav-links">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'terms' %}">Policy</a>
             <a href="{% url 'login' %}">Login</a>
         </div>
     </div>
 
-    <!-- Hero Slider -->
+    <!-- Hero Section -->
     <div class="hero">
-        {% for img in slider_images %}
-        <img src="{% static img %}" alt="Couple {{ forloop.counter }}" class="{% if forloop.first %}active{% endif %}">
-        {% endfor %}
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=900&fit=crop" alt="Couple 1" class="active">
+        <img src="https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=1200&h=900&fit=crop" alt="Couple 2">
+        <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&h=900&fit=crop" alt="Couple 3">
         <div class="overlay">
             <h1>Find Your Perfect Match</h1>
-            <p>Join thousands of happy couples and start your journey of love today!</p>
-            <a href="{% url 'request_otp' %}" class="btn">Get Started</a>
+            <p>Join thousands of happy couples and start your journey of love today</p>
+            <a href="{% url 'request_otp' %}" class="btn">Get Started Free</a>
         </div>
     </div>
 
-    <!-- Testimonials -->
-    <section class="quotes">
-        <h2>What Our Members Say</h2>
-        {% for quote in testimonials %}
-            <p>"{{ quote }}"</p>
-        {% endfor %}
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Happy Members</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5K+</div>
+                <div class="stat-label">Success Stories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Customer Support</div>
+            </div>
+        </div>
     </section>
 
-    <!-- How it works -->
+    <!-- How It Works -->
     <section class="how-it-works">
         <h2>How It Works</h2>
         <div class="steps">
-            {% for step in steps %}
             <div class="step">
-                <h3>{{ step.title }}</h3>
-                <p>{{ step.description }}</p>
+                <div class="step-number">1</div>
+                <h3>Create Profile</h3>
+                <p>Sign up and build your perfect profile with photos and details.</p>
             </div>
-            {% endfor %}
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Browse Matches</h3>
+                <p>Discover compatible profiles based on your preferences.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Connect & Chat</h3>
+                <p>Start meaningful conversations with your matches.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Find Love</h3>
+                <p>Meet, connect, and build your forever story.</p>
+            </div>
         </div>
     </section>
 
     <!-- Featured Profiles -->
-        <section class="featured-profiles">
-            <h2>💞 Featured Profiles</h2>
-            <div class="profile-cards">
-                <div class="card">
-                    <img src="{% static 'images/a3.jpeg' %}" alt="Profile 1">
+    <section class="featured-profiles">
+        <h2>💞 Featured Profiles</h2>
+        <div class="profile-cards">
+            <div class="profile-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop" alt="Profile">
+                <div class="profile-info">
                     <h3>Aarav, 28</h3>
                     <p>Delhi, India</p>
                 </div>
-                <div class="card">
-                    <img src="{% static 'images/a2.jpeg' %}" alt="Profile 2">
+            </div>
+            <div class="profile-card">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=400&fit=crop" alt="Profile">
+                <div class="profile-info">
                     <h3>Priya, 26</h3>
                     <p>Mumbai, India</p>
                 </div>
-                <div class="card">
-                    <img src="{% static 'images/a1.jpeg' %}" alt="Profile 3">
+            </div>
+            <div class="profile-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=400&fit=crop" alt="Profile">
+                <div class="profile-info">
                     <h3>Rohan, 30</h3>
                     <p>Bangalore, India</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Blog / Articles -->
-        <section class="blog">
-            <h2>📝 Relationship Tips & Articles</h2>
-            <div class="blog-cards">
-                <div class="card">
-                    <h3>5 Tips for a Strong Relationship</h3>
-                    <p>Learn how to build trust, communicate better, and strengthen your bond.</p>
-                </div>
-                <div class="card">
-                    <h3>Choosing the Right Partner</h3>
-                    <p>Guidance on finding compatibility, shared values, and long-term happiness.</p>
-                </div>
-                <div class="card">
-                    <h3>Online Dating Safety</h3>
-                    <p>Stay safe while browsing profiles and connecting with potential matches.</p>
-                </div>
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>💖 What Our Members Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>"Vivah helped us find each other. We are now happily married!"</p>
+                <h4>— Aarav & Priya</h4>
             </div>
-        </section>
-
-        <!-- Success Stories -->
-        <section class="success-stories">
-            <h2>💖 Success Stories</h2>
-            <div class="stories">
-                <div class="story">
-                    <p>"Vivah helped us find each other. We are now happily married!"</p>
-                    <h4>— Aarav & Priya</h4>
-                </div>
-                <div class="story">
-                    <p>"We met on Vivah, and the platform made communication simple and safe."</p>
-                    <h4>— Rohan & Sneha</h4>
-                </div>
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>"Amazing platform with genuine profiles. Great experience!"</p>
+                <h4>— Rohan & Sneha</h4>
             </div>
-        </section>
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>"Safe, secure, and user-friendly. Highly recommended!"</p>
+                <h4>— Nikhil & Anjali</h4>
+            </div>
+        </div>
+    </section>
 
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to Find Your Forever?</h2>
+        <p>Join thousands of successful couples who found their perfect match on Vivah</p>
+        <a href="#" class="btn">Start Your Journey Today</a>
+    </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Vivah. All Rights Reserved.</p>
-        <p>Contact us: <a href="mailto:rknri847225@gmail.com">support@vivah.com</a></p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">About Us</a>
+                <a href="#">Blog</a>
+                <a href="#">Success Stories</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Safety Tips</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Report Abuse</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Vivah. All Rights Reserved.</p>
+            <p>Contact us: <a href="mailto:support@vivah.com">support@vivah.com</a></p>
+        </div>
     </footer>
 
     <!-- JS for Hero Slider -->
@@ -371,7 +626,7 @@
             slides[currentIndex].classList.add('active');
         }
 
-        setInterval(showNextSlide, 4000); // Change image every 4 seconds
+        setInterval(showNextSlide, 5000);
     </script>
 </body>
 </html>
