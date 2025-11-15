@@ -339,6 +339,44 @@ def user_profile_detail(request, uid):
     }
     return render(request, 'profile/user_profile_detail.html', context)
 
+# Call your Abuse / Phone detection API
+            # try:
+            #     import requests
+            #     api_response = requests.post(
+            #         "http://127.0.0.1:8000/tools/get-text-check/",
+            #         json={"text": text},
+            #         timeout=5
+            #     )
+
+            #     result = api_response.json().get("data", {})
+            #     abuse = result.get("abuse_used", False)
+            #     mobile = result.get("mobile_number_used", False)
+
+            #     # If either abuse OR mobile found → block message
+            #     if abuse or mobile:
+            #         ChatMessage.objects.create(
+            #             sender=request.user,
+            #             receiver=receiver,
+            #             message=" "   # store blank
+            #         )
+            #         messages.warning(request, "It's your last warning!")
+            #     else:
+            #         # Safe message → save normally
+            #         ChatMessage.objects.create(
+            #             sender=request.user,
+            #             receiver=receiver,
+            #             message=text
+            #         )
+
+            # except Exception as e:
+            #     print("API error:", e)
+            #     # In API failure, still allow message to be saved
+            #     ChatMessage.objects.create(
+            #         sender=request.user,
+            #         receiver=receiver,
+            #         message=text
+            #     )
+
 
 @login_required
 def chat_view(request, receiver_email):

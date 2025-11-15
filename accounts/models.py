@@ -683,12 +683,12 @@ class ChatMessage(models.Model):
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='sent_messages'
+        related_name='sent_messages', null=True, blank=True
     )
     receiver = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='received_messages'
+        related_name='received_messages', null=True, blank=True
     )
     message = models.TextField()
     seen = models.BooleanField(default=False)
@@ -696,9 +696,6 @@ class ChatMessage(models.Model):
 
     class Meta:
         ordering = ['timestamp']
-
-    def __str__(self):
-        return f"From {self.sender.username} to {self.receiver.username}"
 
 
 def user_premium_upload_path(instance, filename):
