@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -475,9 +477,10 @@
 
     <!-- Hero Section -->
     <div class="hero">
-        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=900&fit=crop" alt="Couple 1" class="active">
-        <img src="https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=1200&h=900&fit=crop" alt="Couple 2">
-        <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&h=900&fit=crop" alt="Couple 3">
+        {% comment %} <img src="{% static 'images/1.jpg' %}" alt="Couple 1" >
+        <img src="{% static 'images/1.jpg' %}" alt="Couple 2">
+        <img src="{% static 'images/1.jpg' %}" alt="Couple 3"> {% endcomment %}
+        <img src="{% static 'images/1.jpg' %}" alt="Couple 3" class="active">
         <div class="overlay">
             <h1>Find Your Perfect Match</h1>
             <p>Join thousands of happy couples and start your journey of love today</p>
@@ -489,11 +492,11 @@
     <section class="stats">
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-number">50K+</div>
+                <div class="stat-number">2K+</div>
                 <div class="stat-label">Happy Members</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">5K+</div>
+                <div class="stat-number">1K+</div>
                 <div class="stat-label">Success Stories</div>
             </div>
             <div class="stat-item">
@@ -535,24 +538,24 @@
         <h2>💞 Featured Profiles</h2>
         <div class="profile-cards">
             <div class="profile-card">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop" alt="Profile">
+                <img src="{% static 'images/a1.jpeg' %}" alt="Profile">
                 <div class="profile-info">
                     <h3>Aarav, 28</h3>
-                    <p>Delhi, India</p>
+                    <p>Madhubani, Bihar</p>
                 </div>
             </div>
             <div class="profile-card">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=400&fit=crop" alt="Profile">
+                <img src="{% static 'images/a2.jpeg' %}" alt="Profile">
                 <div class="profile-info">
                     <h3>Priya, 26</h3>
-                    <p>Mumbai, India</p>
+                    <p>Darbhanga, Bihar</p>
                 </div>
             </div>
             <div class="profile-card">
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=400&fit=crop" alt="Profile">
+                <img src="{% static 'images/a3.jpeg' %}" alt="Profile">
                 <div class="profile-info">
                     <h3>Rohan, 30</h3>
-                    <p>Bangalore, India</p>
+                    <p>Saharghat, Bihar</p>
                 </div>
             </div>
         </div>
@@ -592,26 +595,20 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Quick Links</h4>
-                <a href="#">About Us</a>
-                <a href="#">Blog</a>
-                <a href="#">Success Stories</a>
+                <a href="{% url 'about' %}">About Us</a>
             </div>
             <div class="footer-section">
-                <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="#">Safety Tips</a>
-                <a href="#">Contact Us</a>
+                <h4>Home</h4>
+                <a href="{% url 'home' %}">Home</a>
             </div>
             <div class="footer-section">
                 <h4>Legal</h4>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Report Abuse</a>
+                <a href="{% url 'terms' %}">Privacy Policy</a>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 Vivah. All Rights Reserved.</p>
-            <p>Contact us: <a href="mailto:support@vivah.com">support@vivah.com</a></p>
+            <p>Contact us: <a href="mailto:myvivahjourney@gmail.com">myvivahjourney@gmail.com</a></p>
         </div>
     </footer>
 

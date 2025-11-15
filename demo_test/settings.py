@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'accounts',
-    'chandan',
+    # 'chandan',
 ]
 
 MIDDLEWARE = [
@@ -117,7 +117,7 @@ EMAIL_HOST_PASSWORD= os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://0628b4964b70.ngrok-free.app",
+    "https://be068ed3ae8e.ngrok-free.app",
 ]
 
 

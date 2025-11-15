@@ -13,7 +13,7 @@ def redirect_to_home(request, path=None):
 urlpatterns = [
     path('admin-987/', admin.site.urls),
     path('', include('accounts.api_urls')),
-    path('chandan/', include('chandan.urls')),
+    # path('chandan/', include('chandan.urls')),
 ]
 
 # Serve static & media files in DEBUG mode

@@ -946,8 +946,7 @@
         <h2>Ready to Find Your Perfect Match?</h2>
         <p>Join our thriving community of thousands of singles looking for meaningful relationships today. Start your journey with Vivah and discover genuine connections that could lead to your forever story.</p>
         <div class="cta-buttons">
-            <a href="#" class="cta-btn cta-btn-primary">👥 Browse Profiles</a>
-            <a href="#" class="cta-btn cta-btn-secondary">💬 Get Help</a>
+            <a href="{% url 'login' %}" class="cta-btn cta-btn-primary">👥 Browse Profiles</a>
         </div>
     </div>
 
@@ -956,12 +955,6 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Quick Links</h4>
-                <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Blog</a>
-                <a href="#">Success Stories</a>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
             </div>
-            <div class="footer-section">
-                <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="#">Safety Tips</a>
